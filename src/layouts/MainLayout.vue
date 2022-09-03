@@ -42,15 +42,22 @@
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ scope.opt.title_english }}</q-item-label>
+                  <q-item-label caption>
+                    {{ scope.opt.type }} <br>
+                    {{ scope.opt.score }} <br>
+                    {{ scope.opt.status }} <br>
+                    {{ scope.opt.year }} <br>
+                  </q-item-label>
                 </q-item-section>
               </q-item>
             </template>
             <template #no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                  No results
-                </q-item-section>
-              </q-item>
+              <div class="flex flex-center q-pa-md">
+                <q-spinner-pie
+                  size="md"
+                  color="primary"
+                />
+              </div>
             </template>
             <template #prepend>
               <q-icon name="search" />
