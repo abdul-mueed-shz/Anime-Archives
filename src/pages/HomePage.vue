@@ -34,7 +34,7 @@
       </div>
       <div class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md"
           style="letter-spacing:0.2em"
           ref="toprated"
         >
@@ -44,7 +44,7 @@
       </div>
       <div class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md"
           style="letter-spacing:0.2em"
           ref="recent"
         >
@@ -54,7 +54,7 @@
       </div>
       <div class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md"
           style="letter-spacing:0.2em"
           ref="upcomin"
         >

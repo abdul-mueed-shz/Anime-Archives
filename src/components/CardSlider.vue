@@ -86,7 +86,7 @@ const animeList = reactive({
   value: []
 })
 axios.get(props.api)
-  .then(res => { animeList.value = res.data.data })
+  .then(res => { animeList.value = res.data.data; console.log(animeList.value) })
   .catch(err => console.log(err))
 
 function goToPage (animeId) {

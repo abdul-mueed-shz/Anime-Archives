@@ -61,7 +61,7 @@
       <router-view :key="$route.fullPath" />
     </q-page-container>
 
-    <q-footer class="bg-black">
+    <q-footer class="bg-black q-pt-sm">
       <div class=" flex flex-center q-pa-xs">
         <q-btn
           round
