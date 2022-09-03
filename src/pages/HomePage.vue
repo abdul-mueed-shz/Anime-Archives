@@ -10,7 +10,7 @@
           inline-label
           outside-arrows
           mobile-arrows
-          style="width:80vw"
+          style="max-width:50vw"
         >
           <q-tab
             icon="home"
@@ -21,7 +21,7 @@
           <q-tab
             icon="person"
             name="watched"
-            label="Most Watched"
+            label="Recent"
             @click="scrollToElement(recent)"
           />
           <q-tab
@@ -67,6 +67,7 @@
 </template>
 
 <script setup>
+/* eslint-disable */
 import CardSlider from '../components/CardSlider.vue'
 import { scroll } from 'quasar'
 import { ref } from 'vue'

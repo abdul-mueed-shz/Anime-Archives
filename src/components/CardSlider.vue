@@ -23,7 +23,10 @@
             style="width: 300px"
             class="q-pa-sm"
           >
-            <q-card class="full-height my-background">
+            <q-card
+              @click="goToPage(anime.mal_id)"
+              class="full-height my-background"
+            >
               <q-card-section>
                 <q-img
                   style="
@@ -69,8 +72,10 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import axios from 'axios'
-let position = 0
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+let position = 0
 const props = defineProps({
   api: {
     type: String, default: ''
@@ -84,13 +89,9 @@ axios.get(props.api)
   .then(res => { animeList.value = res.data.data })
   .catch(err => console.log(err))
 
-setTimeout(() => {
-  console.log(props.api)
-  console.log(animeList.value[0].images.jpg)
-}, 1000)
-// onMounted(() => {
-
-// })
+function goToPage (animeId) {
+  router.push(`/card/${animeId}`)
+}
 const scrollAreaRef = ref(null)
 function animateScroll (direction) {
   const pos = scrollAreaRef.value.getScrollPercentage().left

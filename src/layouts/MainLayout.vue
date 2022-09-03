@@ -13,35 +13,40 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title class="text-primary text-bold">
+        <q-toolbar-title
+          @click="$router.push('/')"
+          class="text-primary text-bold my-clickable"
+        >
           Anime Tracker Application
         </q-toolbar-title>
-
         <div>
-          <!--  -->
-          <q-input
-            placeholder="Search"
+          <q-select
+            class="q-ml-md q-pa-sm"
             dark
             square
             dense
-            filled
-            v-model="text"
-            input-class="text"
-            class="q-ml-md"
+            outlined
+            v-model="selectedQuery"
+            placeholder="Search"
+            use-input
+            hide-dropdown-icon
+            input-debounce="500"
+            :options="options"
+            option-label="title_english"
+            @filter="filterFn"
+            @update:model-value="goToPage(selectedQuery.mal_id)"
           >
-            <template #append>
-              <q-icon
-                v-if="text === ''"
-                name="search"
-              />
-              <q-icon
-                v-else
-                name="clear"
-                class="cursor-pointer"
-                @click="text = ''"
-              />
+            <template #no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
             </template>
-          </q-input>
+            <template #prepend>
+              <q-icon name="search" />
+            </template>
+          </q-select>
         </div>
       </q-toolbar>
     </q-header>
@@ -53,14 +58,11 @@
     />
 
     <q-page-container>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </q-page-container>
 
     <q-footer class="bg-black">
       <div class=" flex flex-center q-pa-xs">
-        <!-- <div class="q-mr-sm">
-          &copy;socials:
-        </div> -->
         <q-btn
           round
           flat
@@ -115,12 +117,38 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref } from 'vue'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const leftDrawerOpen = ref(false)
-const text = ref('')
+const selectedQuery = ref('')
+const stringOptions = []
+const options = ref(stringOptions)
+function filterFn (query, update, abort) {
+  if (query.length < 2) {
+    abort()
+    return
+  }
+  update(() => {
+    const needle = query.toLowerCase()
+    axios.get(`https://api.jikan.moe/v4/anime?q=${needle}`)
+      .then(result => { options.value = result.data.data.filter((val) => { return val.title_english != null }) })
+      .catch(error => console.log(error))
+  })
+}
+function goToPage (animeId) {
+  router.push(`/card/${animeId}`)
+  selectedQuery.value = ''
+}
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
 </script>
+
+<style>
+  .my-clickable{
+    cursor: pointer;
+  }
+</style>
