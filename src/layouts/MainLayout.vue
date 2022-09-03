@@ -32,10 +32,19 @@
             hide-dropdown-icon
             input-debounce="500"
             :options="options"
-            option-label="title_english"
             @filter="filterFn"
             @update:model-value="goToPage(selectedQuery.mal_id)"
           >
+            <template #option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section avatar>
+                  <q-img :src="scope.opt.images.jpg.image_url" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.title_english }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
             <template #no-option>
               <q-item>
                 <q-item-section class="text-grey">
@@ -68,6 +77,8 @@
           flat
           size="xs"
           class="q-mr-sm"
+          href="https://www.linkedin.com/in/abdul-mueed-shahbaz-8455b618a/"
+          target="_blank"
         >
           <q-avatar>
             <q-img
@@ -81,6 +92,8 @@
           flat
           size="xs"
           class="q-mr-sm"
+          href="https://www.instagram.com/al_mo_eed/"
+          target="_blank"
         >
           <q-avatar>
             <q-img src="../assets/insta.png" />
@@ -91,6 +104,8 @@
           flat
           size="xs"
           class="q-mr-sm"
+          href="https://www.facebook.com/moeedrajpootx/"
+          target="_blank"
         >
           <q-avatar>
             <q-img src="../assets/fbwhite.png" />
@@ -101,6 +116,8 @@
           flat
           size="xs"
           class="q-mr-sm"
+          href="https://github.com/Abdul-Mueed-Shahbaz"
+          target="_blank"
         >
           <q-avatar>
             <q-img src="../assets/github.png" />

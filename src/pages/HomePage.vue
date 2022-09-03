@@ -10,7 +10,7 @@
           inline-label
           outside-arrows
           mobile-arrows
-          style="max-width:50vw"
+          style="max-width:50vw;"
         >
           <q-tab
             icon="home"
