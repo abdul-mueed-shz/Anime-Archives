@@ -171,8 +171,30 @@ function toggleLeftDrawer () {
 
 </script>
 
-<style>
+<style lang="scss">
   .my-clickable{
     cursor: pointer;
+  }
+    /* width */
+    ::-webkit-scrollbar {
+    width: 11px;
+    background-color: black;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(26, 26, 26);
+    border-radius: 5.5px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $primary;
+    border-radius: 6px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a50000;
   }
 </style>
