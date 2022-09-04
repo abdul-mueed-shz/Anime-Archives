@@ -2,7 +2,7 @@
   <q-page class="row text-white bg-black">
     <q-card class="col-12 col-sm-3 bg-grey-10 q-ma-sm q-pa-md">
       <q-img
-        :src="animeImage"
+        :src="animeInformation.value.images?.jpg?.large_image_url ?? 'https://picsum.photos/1920/1080'"
         style="max-height:350px"
       />
       <div class="div q-mt-md">
@@ -62,7 +62,7 @@
     </div>
     <q-card class="col-12 col-sm-3 bg-grey-10 q-ma-sm q-pa-md">
       <q-video
-        :src="animeTrailer!=undefined?animeTrailer:'https://www.youtube.com/embed?v=Xi_xB3a2NZg'"
+        :src="animeInformation.value.trailer?.embed_url ?? 'https://www.youtube.com/embed?v=Xi_xB3a2NZg'"
         style="max-width:fit-content; margin-left:auto; margin-right:auto;"
       />
       <q-card class="bg-grey-9 q-ma-md">
@@ -101,17 +101,14 @@
 </template>
 
 <script setup>
-// .trailer.embed_url
 import axios from 'axios'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
 
 const animeId = useRoute().params.id
 const animeInformation = reactive({
   value: {}
 })
-const animeTrailer = ref('')
-const animeImage = ref('')
 const aired = reactive({
   from: undefined,
   to: undefined
@@ -120,8 +117,6 @@ axios.get(`https://api.jikan.moe/v4/anime/${animeId}/full`)
   .then(
     result => {
       animeInformation.value = result.data.data
-      animeTrailer.value = animeInformation.value.trailer.embed_url
-      animeImage.value = animeInformation.value.images.jpg.large_image_url
       aired.from = new Date(animeInformation.value.aired.from)
       aired.to = new Date(animeInformation.value.aired.to)
       aired.from = aired.from.getUTCFullYear() + '/' + (aired.from.getUTCMonth() + 1) + '/' + aired.from.getUTCDate()
