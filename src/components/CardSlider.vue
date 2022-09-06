@@ -12,8 +12,8 @@
     <div class="col">
       <q-scroll-area
         ref="scrollAreaRef"
-        :bar-style="{backgroundColor:'red',opacity:'0.1'}"
-        :thumb-style="{background:'red',opacity:'0.9'}"
+        :bar-style="{backgroundColor:'teal',opacity:'0.1'}"
+        :thumb-style="{background:'teal',opacity:'0.9'}"
         style="height: 500px;"
       >
         <div class="row no-wrap">

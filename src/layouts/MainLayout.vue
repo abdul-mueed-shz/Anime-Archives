@@ -14,7 +14,7 @@
         />
 
         <q-toolbar-title
-          @click="$router.push('/')"
+          @click="$router.push('/home')"
           class="text-primary text-bold my-clickable"
         >
           Anime Tracker Application
