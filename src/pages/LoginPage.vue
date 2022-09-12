@@ -17,6 +17,7 @@
                 label="Email"
                 type="text"
                 v-model="email"
+                lazy-rules="ondemand"
                 :rules="[ val => val && val.length > 0 || 'Email is required']"
                 class="q-mb-md"
               >
@@ -29,6 +30,7 @@
                 dark
                 label="Password"
                 v-model="password"
+                lazy-rules="ondemand"
                 :rules="[ val => val && val.length > 8 || 'Password is required with a length of 8 characters']"
                 type="password"
                 class="q-mb-md"
@@ -74,7 +76,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Utility from 'src/composables/Utility'
+import useUtility from '../composables/useUtility'
+const { notify, storage } = useUtility()
 const email = ref('')
 const password = ref('')
 
@@ -83,11 +86,11 @@ function SignIn () {
   // eslint-disable-next-line no-useless-escape
   const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (regEx.test(email.value)) {
-    Utility.notify('Logged In', 'primary', 500, 'bottom')
-    Utility.storage({ email: email.value, password: password.value })
+    notify('Logged In', 'primary', 500, 'bottom')
+    storage({ email: email.value, password: password.value })
     $router.push('/home')
     return
   }
-  Utility.notify('Invalid Email', 'negative', 500, 'bottom')
+  notify('Invalid Email', 'negative', 500, 'bottom')
 }
 </script>
