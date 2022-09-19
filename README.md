@@ -12,6 +12,7 @@ A single page application made with quasar that shows you recent releases, top r
 #
 <h2>Add Image Here??  Main Features</h2>
 
+* An interesting Login page with the application title (authentication not implemented yet. Utilizing the localstorage to mock the login process)
 * Recently Released, Upcoming and Top rated anime
 * Details page for every anime cliked showing synopsis rating, embedded trailer and other important information
 * Search with suggestions including images, scores, year and type of the anime so it's easy for user to narrow down what he/she wants to search
