@@ -66,7 +66,7 @@
           src="../assets/anime2.png"
         />
         <div class="text-h5 text-white text-weight-bold q-mb-xl text-no-wrap">
-          <span class="text-weight-bolder text-h4 text-secondary">W</span>elcome Senpai
+          <span class="text-weight-bolder text-h4 text-secondary">W</span>elcome to Akaibu
         </div>
       </div>
     </div>

@@ -46,21 +46,21 @@
         <div
           class="flex flex-center text-h6 text-weight-bold q-mb-md"
           style="letter-spacing:0.2em"
-          ref="recent"
+          ref="upcomin"
         >
-          Recent Release
+          Upcoming Anime
         </div>
-        <CardSlider api="https://api.jikan.moe/v4/seasons/now" />
+        <CardSlider api="https://api.jikan.moe/v4/seasons/upcoming" />
       </div>
       <div class="q-mb-lg">
         <div
           class="flex flex-center text-h6 text-weight-bold q-mb-md"
           style="letter-spacing:0.2em"
-          ref="upcomin"
+          ref="recent"
         >
-          Upcoming Hype
+          Recently Released
         </div>
-        <CardSlider api="https://api.jikan.moe/v4/seasons/upcoming" />
+        <CardSlider api="https://api.jikan.moe/v4/seasons/now" />
       </div>
     </div>
   </q-page>

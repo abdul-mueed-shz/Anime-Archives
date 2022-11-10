@@ -17,7 +17,7 @@
           @click="$router.push('/home')"
           class="text-primary text-bold my-clickable"
         >
-          Anime Tracker Application
+          Anime Akaibu
         </q-toolbar-title>
         <div>
           <q-select
@@ -131,9 +131,18 @@
           </q-avatar>
         </q-btn>
       </div>
-      <div class="flex flex-center">
-        <div class="text-h6">
-          Copied with <span class="text-primary">&hearts;</span> by <strong>Abdul Mueed</strong>
+      <div class="flex flex-center q-my-sm">
+        <div class="text-caption">
+          <q-icon
+            size="xs"
+            color="white"
+            name="mail"
+          />
+          <a
+            style="text-decoration:none; color:white;"
+            class="q-ml-xs "
+            href="mailto: abdulmueedshahbaz@gmail.com"
+          >abdulmueedshahbaz@gmail.com</a>
         </div>
       </div>
     </q-footer>
@@ -172,6 +181,7 @@ function toggleLeftDrawer () {
 </script>
 
 <style lang="scss">
+
   .my-clickable{
     cursor: pointer;
   }
