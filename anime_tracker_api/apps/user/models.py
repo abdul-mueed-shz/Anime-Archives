@@ -7,14 +7,9 @@ from django.contrib.auth.models import (
 )
 from django.utils import timezone
 
-DISCOUNT_CODE_TYPES_CHOICES = [
-    ('percent', 'Percentage-based'),
-    ('value', 'Value-based'),
-]
-
 
 # Create your models here
-class MyUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None):
         """
         Creates and saves a User with the given email, date of
@@ -32,7 +27,7 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password=None):
+    def create_superuser(self, email, date_of_birth, user_name, password=None):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
@@ -41,27 +36,26 @@ class MyUserManager(BaseUserManager):
             email,
             password=password,
             date_of_birth=date_of_birth,
+            user_name=user_name
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
 
-class MyUser(AbstractBaseUser):
+class User(AbstractBaseUser):
+    objects = UserManager()
     email = models.EmailField(
         max_length=255,
         unique=True,
     )
+    user_name = models.CharField(max_length=255, null=False, blank=False)
     date_of_birth = models.DateField()
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    credits = models.PositiveIntegerField(default=100)
-    linkedin_token = models.TextField(blank=True, default='')
-    expiry_date = models.DateTimeField(null=True, blank=True)
-    objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['date_of_birth']
+    REQUIRED_FIELDS = ['date_of_birth', 'user_name']
 
     def __str__(self):
         return self.email
@@ -81,16 +75,3 @@ class MyUser(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
-
-    @property
-    def is_out_of_credits(self):
-        "Is the user out  of credits?"
-        return self.credits > 0
-
-    @property
-    def has_sufficient_credits(self, cost):
-        return self.credits - cost >= 0
-
-    @property
-    def linkedin_signed_in(self):
-        return bool(self.linkedin_token) and self.expiry_date > timezone.now()

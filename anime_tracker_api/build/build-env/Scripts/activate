@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\Others\0-DevWorkSpace\CompletedFromMySide\AnimeTrackerApp\anime_api\build\build-env"
+VIRTUAL_ENV="E:\Others\0-DevWorkSpace\CompletedFromMySide\AnimeTrackerApp\animetrackerapp\anime_tracker_api\build\build-env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
