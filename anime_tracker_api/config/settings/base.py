@@ -70,9 +70,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
+        # 'rest_framework.renderers.JSONRenderer',
+        'apps.common.renderers.CustomRenderer.CustomRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-        # 'apps.common.renderers.CustomRenderer',
     ],
 }
 

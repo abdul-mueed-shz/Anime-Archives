@@ -1,24 +1,19 @@
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status, exceptions
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from apps.common.utils.app_functions import get_tokens_for_user, get_refreshed_tokens
-from config.settings.base import SIMPLE_JWT
+from apps.common.utils.app_functions import get_tokens_for_user
 from .serializers import RegistrationSerializer, PasswordChangeSerializer, UserSerializer
 from ..models import User
-import jwt
 
-from ...common.renderers.CustomRenderer import CustomRenderer
+from apps.common.renderers.CustomRenderer import CustomRenderer
 
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     http_method_names = ['post']
-    renderer_classes = [CustomRenderer]
 
     @staticmethod
     def is_authenticated(request):
