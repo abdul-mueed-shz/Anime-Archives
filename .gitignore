@@ -7,7 +7,7 @@ anime_tracker_gui/node_modules/
 .DS_Store
 .thumbs.db
 node_modules
-
+*.sqlite3
 # Quasar core related directories
 .quasar
 /dist
