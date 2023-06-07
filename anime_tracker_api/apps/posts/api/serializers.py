@@ -1,19 +1,23 @@
 from rest_framework import serializers
 
 from apps.posts.models import Post, STATUS
+from apps.user.api.serializers import UserSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField(method_name='get_status')
-    author = serializers.SerializerMethodField(method_name='get_author')
+
+    author_profile = serializers.SerializerMethodField(method_name='get_author', read_only=True)
 
     class Meta:
         model = Post
-        fields = ['title',
-                  'content',
-                  'status',
-                  'author'
-                  ]
+        fields = [
+            'title',
+            'content',
+            'status',
+            'author',
+            'author_profile'
+        ]
 
     def get_status(self, obj):
         """
@@ -27,4 +31,5 @@ class PostSerializer(serializers.ModelSerializer):
         @param obj:
         @return:
         """
-        return obj.author.username
+        user = UserSerializer(obj.author)
+        return user.data
