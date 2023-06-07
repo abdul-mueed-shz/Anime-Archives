@@ -46,6 +46,7 @@ ANIME_TRACKER_APPS = [
     'apps.common.apps.CommonConfig',
     'apps.user.apps.UserConfig',
     'apps.watchlist.apps.WatchlistConfig',
+    'apps.posts.apps.PostsConfig',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + ANIME_TRACKER_APPS
@@ -54,7 +55,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',

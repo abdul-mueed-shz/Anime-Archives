@@ -1,3 +1,4 @@
+from djangochannelsrestframework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from .serializers import WatchlistSerializer
@@ -14,8 +15,3 @@ class WatchListViewSet(ModelViewSet):
         'patch'
     ]
     queryset = WatchList.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        return Response(status=200, data={
-            'Status': 'Under production'
-        })
