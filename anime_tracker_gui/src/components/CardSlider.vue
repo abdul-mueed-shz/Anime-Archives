@@ -25,7 +25,7 @@
           >
             <q-card
               @click="goToPage(anime.mal_id)"
-              class="full-height my-background"
+              class="full-height my-background card-confs"
             >
               <q-card-section>
                 <q-img
@@ -86,8 +86,8 @@ const animeList = reactive({
   value: []
 })
 axios.get(props.api)
-  .then(res => { animeList.value = res.data.data; console.log(animeList.value) })
-  .catch(err => console.log(err))
+  .then(res => { animeList.value = res.data.data })
+  .catch(err => console.error(err))
 
 function goToPage (animeId) {
   router.push(`/card/${animeId}`)
@@ -111,4 +111,5 @@ function animateScroll (direction) {
   .my-background:hover{
     background-color: $primary;
   }
+
   </style>

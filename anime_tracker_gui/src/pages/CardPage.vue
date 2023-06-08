@@ -1,6 +1,10 @@
 <template>
-  <q-page class="row text-white bg-black">
-    <q-card class="col-12 col-sm-3 bg-grey-10 q-ma-sm q-pa-md">
+  <q-page
+    class="row text-white bg-black q-gutter-x-md "
+    :class="{'padding_6rem':$q.screen.gt.md}"
+    padding
+  >
+    <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
       <q-img
         :src="animeInformation.value.images?.jpg?.large_image_url ?? 'https://picsum.photos/1920/1080'"
         style="max-height:350px"
@@ -47,9 +51,9 @@
         <strong>Favorites: </strong>{{ animeInformation.value.favorites }}
       </div>
     </q-card>
-    <div class="col-12 col-sm">
+    <div class="col-12 col-md q-mt-sm">
       <q-card
-        class=" col-12 col-sm bg-dark full-height q-pa-sm q-mx-xs q-my-xs overflow-auto"
+        class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs"
         style="max-height:95vh"
       >
         <q-card-section class="flex flex-center text-h6 text-weight-bolder">
@@ -60,7 +64,7 @@
         </q-card-section>
       </q-card>
     </div>
-    <q-card class="col-12 col-sm-3 bg-grey-10 q-ma-sm q-pa-md">
+    <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
       <q-video
         :src="animeInformation.value.trailer?.embed_url ?? 'https://www.youtube.com/embed?v=Xi_xB3a2NZg'"
         style="max-width:fit-content; margin-left:auto; margin-right:auto;"

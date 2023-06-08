@@ -14,55 +14,74 @@
         />
 
         <q-toolbar-title
-          @click="$router.push('/home')"
-          class="text-primary text-bold my-clickable"
+          class="text-primary text-bold"
         >
-          Anime Akaibu
-        </q-toolbar-title>
-        <div>
-          <q-select
-            class="q-ml-md q-pa-sm"
-            dark
-            square
-            dense
-            outlined
-            v-model="selectedQuery"
-            placeholder="Search"
-            use-input
-            hide-dropdown-icon
-            input-debounce="500"
-            :options="options"
-            @filter="filterFn"
-            @update:model-value="goToPage(selectedQuery.mal_id)"
+          <div
+            class="my-clickable"
+            @click="$router.push('/')"
           >
-            <template #option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section avatar>
-                  <q-img :src="scope.opt.images.jpg.image_url" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.title_english }}</q-item-label>
-                  <q-item-label caption>
-                    {{ scope.opt.type }} <br>
-                    {{ scope.opt.score }} <br>
-                    {{ scope.opt.status }} <br>
-                    {{ scope.opt.year }} <br>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </template>
-            <template #no-option>
-              <div class="flex flex-center q-pa-md">
-                <q-spinner-pie
-                  size="md"
-                  color="primary"
-                />
-              </div>
-            </template>
-            <template #prepend>
-              <q-icon name="search" />
-            </template>
-          </q-select>
+            Anime Akaibu
+          </div>
+        </q-toolbar-title>
+        <div class="row items-center  q-pt-xs">
+          <div>
+            <q-select
+              class="q-pa-sm"
+              dark
+              rounded
+              dense
+              outlined
+              v-model="selectedQuery"
+              placeholder="Search"
+              use-input
+              hide-dropdown-icon
+              input-debounce="500"
+              :options="options"
+              @filter="filterFn"
+              @update:model-value="goToPage(selectedQuery.mal_id)"
+            >
+              <template #option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section avatar>
+                    <q-img :src="scope.opt.images.jpg.image_url" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.title_english }}</q-item-label>
+                    <q-item-label caption>
+                      {{ scope.opt.type }} <br>
+                      {{ scope.opt.score }} <br>
+                      {{ scope.opt.status }} <br>
+                      {{ scope.opt.year }} <br>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+              <template #no-option>
+                <div class="flex flex-center q-pa-md">
+                  <q-spinner-pie
+                    size="md"
+                    color="primary"
+                  />
+                </div>
+              </template>
+              <template #prepend>
+                <q-icon name="search" />
+              </template>
+            </q-select>
+          </div>
+          <div>
+            <q-avatar
+              class="cursor-pointer"
+              icon="person"
+              color="primary"
+              size="md"
+              @click="$router.push('/login')"
+            >
+              <q-tooltip>
+                Login
+              </q-tooltip>
+            </q-avatar>
+          </div>
         </div>
       </q-toolbar>
     </q-header>
@@ -167,7 +186,7 @@ function filterFn (query, update, abort) {
     const needle = query.toLowerCase()
     axios.get(`https://api.jikan.moe/v4/anime?q=${needle}`)
       .then(result => { options.value = result.data.data.filter((val) => { return val.title_english != null }) })
-      .catch(error => console.log(error))
+      .catch(error => console.error(error))
   })
 }
 function goToPage (animeId) {
