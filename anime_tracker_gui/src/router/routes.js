@@ -15,7 +15,7 @@ const routes = [
     ]
   },
   {
-    path: '/card/:id',
+    path: '/details/:id',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('src/pages/CardPage.vue') }

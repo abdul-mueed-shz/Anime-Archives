@@ -117,7 +117,7 @@ const aired = reactive({
   from: undefined,
   to: undefined
 })
-axios.get(`https://api.jikan.moe/v4/anime/${animeId}/full`)
+axios.get(`https://api.jikan.moe/v4/anime/${animeId}/full`, { headers: { 'Access-Control-Allow-Origin': '*' } })
   .then(
     result => {
       animeInformation.value = result.data.data

@@ -85,12 +85,12 @@ const props = defineProps({
 const animeList = reactive({
   value: []
 })
-axios.get(props.api)
+axios.get(props.api, { headers: { 'Access-Control-Allow-Origin': '*' } })
   .then(res => { animeList.value = res.data.data })
   .catch(err => console.error(err))
 
 function goToPage (animeId) {
-  router.push(`/card/${animeId}`)
+  router.push(`/details/${animeId}`)
 }
 const scrollAreaRef = ref(null)
 function animateScroll (direction) {

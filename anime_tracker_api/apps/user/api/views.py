@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from rest_framework import status, exceptions
+from rest_framework import status, exceptions, permissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
@@ -14,6 +14,7 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     http_method_names = ['post']
+    permission_classes = [permissions.AllowAny]
 
     @staticmethod
     def is_authenticated(request):

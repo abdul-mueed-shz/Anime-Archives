@@ -184,7 +184,7 @@ function filterFn (query, update, abort) {
   }
   update(() => {
     const needle = query.toLowerCase()
-    axios.get(`https://api.jikan.moe/v4/anime?q=${needle}`)
+    axios.get(`https://api.jikan.moe/v4/anime?q=${needle}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then(result => { options.value = result.data.data.filter((val) => { return val.title_english != null }) })
       .catch(error => console.error(error))
   })
