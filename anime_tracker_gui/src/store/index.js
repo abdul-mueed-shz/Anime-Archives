@@ -1,6 +1,6 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-
+import translations from './app/translations'
 // import example from './module-example'
 
 /*
@@ -15,7 +15,7 @@ import { createStore } from 'vuex'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      // example
+      translations
     },
 
     // enable strict mode (adds overhead!)

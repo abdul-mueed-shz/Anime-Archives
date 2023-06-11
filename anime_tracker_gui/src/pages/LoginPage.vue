@@ -76,21 +76,26 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import useUtility from '../composables/useUtility'
-const { notify, storage } = useUtility()
-const email = ref('')
-const password = ref('')
+import useUtility from '../common/composables/useUtility'
+import { ROUTE_CONSTS } from 'src/common/constants/routes'
+import { APP_CONSTS } from 'src/common/constants/app'
+import useComputes from 'src/common/composables/useComputes'
 
 const $router = useRouter()
+
+const { MAP } = useComputes()
+const { successNotif, storage, errorNotif } = useUtility()
+
+const email = ref(null)
+const password = ref(null)
+
 function SignIn () {
-  // eslint-disable-next-line no-useless-escape
-  const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  if (regEx.test(email.value)) {
-    notify('Logged In', 'primary', 500, 'bottom')
+  if (APP_CONSTS.REGEX.VALID_EMAIL_CHECK.test(email.value)) {
+    successNotif(MAP.value.AUTH.MESSAGES.LOGGED_IN)
     storage({ email: email.value, password: password.value })
-    $router.push('/home')
+    $router.push(ROUTE_CONSTS.HOME.PATH)
     return
   }
-  notify('Invalid Email', 'negative', 500, 'bottom')
+  errorNotif(MAP.value.ERRORS.AUTH.INVALID_EMAIL)
 }
 </script>

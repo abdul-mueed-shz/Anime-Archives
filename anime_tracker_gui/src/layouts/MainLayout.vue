@@ -1,7 +1,5 @@
 <template>
-  <q-layout
-    view="hHh Lpr lff"
-  >
+  <q-layout view="hHh Lpr lff">
     <q-header class="bg-black">
       <q-toolbar>
         <q-btn
@@ -18,9 +16,9 @@
         >
           <div
             class="my-clickable"
-            @click="$router.push('/')"
+            @click="$router.push(ROUTE_CONSTS.HOME.PATH)"
           >
-            Anime Akaibu
+            {{ MAP.COMMON.INTERPOLATIONS.APP_TITLE }}
           </div>
         </q-toolbar-title>
         <div class="row items-center  q-pt-xs">
@@ -75,10 +73,10 @@
               icon="person"
               color="primary"
               size="md"
-              @click="$router.push('/login')"
+              @click="$router.push(ROUTE_CONSTS.LOGIN.PATH)"
             >
               <q-tooltip>
-                Login
+                {{ MAP.COMMON.TOOLTIPS.LOGIN }}
               </q-tooltip>
             </q-avatar>
           </div>
@@ -103,12 +101,12 @@
           flat
           size="xs"
           class="q-mr-sm"
-          href="https://www.linkedin.com/in/abdul-mueed-shahbaz-8455b618a/"
-          target="_blank"
+          :href="APP_CONSTS.CREATOR_INFO.LNKDN"
+          :target="APP_CONSTS.CREATOR_INFO.TARGET_ACTION"
         >
           <q-avatar>
             <q-img
-              style="width:40px"
+              class="creator-info__img"
               src="../assets/lkdn.png"
             />
           </q-avatar>
@@ -118,8 +116,8 @@
           flat
           size="xs"
           class="q-mr-sm"
-          href="https://www.instagram.com/al_mo_eed/"
-          target="_blank"
+          :href="APP_CONSTS.CREATOR_INFO.INSTA"
+          :target="APP_CONSTS.CREATOR_INFO.TARGET_ACTION"
         >
           <q-avatar>
             <q-img src="../assets/insta.png" />
@@ -130,8 +128,8 @@
           flat
           size="xs"
           class="q-mr-sm"
-          href="https://www.facebook.com/moeedrajpootx/"
-          target="_blank"
+          :href="APP_CONSTS.CREATOR_INFO.FB"
+          :target="APP_CONSTS.CREATOR_INFO.TARGET_ACTION"
         >
           <q-avatar>
             <q-img src="../assets/fbwhite.png" />
@@ -142,8 +140,8 @@
           flat
           size="xs"
           class="q-mr-sm"
-          href="https://github.com/Abdul-Mueed-Shahbaz"
-          target="_blank"
+          :href="APP_CONSTS.CREATOR_INFO.GITHUB"
+          :target="APP_CONSTS.CREATOR_INFO.TARGET_ACTION"
         >
           <q-avatar>
             <q-img src="../assets/github.png" />
@@ -158,10 +156,9 @@
             name="mail"
           />
           <a
-            style="text-decoration:none; color:white;"
-            class="q-ml-xs "
-            href="mailto: abdulmueedshahbaz@gmail.com"
-          >abdulmueedshahbaz@gmail.com</a>
+            class="q-ml-xs creator-info__email-anchor"
+            :href="`mailto: ${APP_CONSTS.CREATOR_INFO.EMAIL}`"
+          >{{ MAP.COMMON.INTERPOLATIONS.EMAIL }}</a>
         </div>
       </div>
     </q-footer>
@@ -169,14 +166,22 @@
 </template>
 
 <script setup>
-import axios from 'axios'
+import { jikanApi } from 'src/boot/axios'
+import useComputes from 'src/common/composables/useComputes'
+import { APP_CONSTS } from 'src/common/constants/app'
+import { ROUTE_CONSTS } from 'src/common/constants/routes'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
+
+const { MAP } = useComputes()
+
 const leftDrawerOpen = ref(false)
 const selectedQuery = ref('')
 const stringOptions = []
 const options = ref(stringOptions)
+
 function filterFn (query, update, abort) {
   if (query.length < 2) {
     abort()
@@ -184,13 +189,17 @@ function filterFn (query, update, abort) {
   }
   update(() => {
     const needle = query.toLowerCase()
-    axios.get(`https://api.jikan.moe/v4/anime?q=${needle}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+    jikanApi.get('anime', {
+      params: {
+        q: needle
+      }
+    })
       .then(result => { options.value = result.data.data.filter((val) => { return val.title_english != null }) })
       .catch(error => console.error(error))
   })
 }
 function goToPage (animeId) {
-  router.push(`/card/${animeId}`)
+  router.push(`${ROUTE_CONSTS.DETAILS.PATH}${animeId}`)
   selectedQuery.value = ''
 }
 function toggleLeftDrawer () {
@@ -200,30 +209,35 @@ function toggleLeftDrawer () {
 </script>
 
 <style lang="scss">
+.creator-info__email-anchor{
+  text-decoration:none; color:white;
+}
+.creator-info__img{
+  width:40px
+}
+.my-clickable{
+  cursor: pointer;
+}
+  /* width */
+  ::-webkit-scrollbar {
+  width: 11px;
+  background-color: black;
+}
 
-  .my-clickable{
-    cursor: pointer;
-  }
-    /* width */
-    ::-webkit-scrollbar {
-    width: 11px;
-    background-color: black;
-  }
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(26, 26, 26);
+  border-radius: 5.5px;
+}
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px rgb(26, 26, 26);
-    border-radius: 5.5px;
-  }
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $primary;
+  border-radius: 6px;
+}
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: $primary;
-    border-radius: 6px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #a50000;
-  }
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a50000;
+}
 </style>

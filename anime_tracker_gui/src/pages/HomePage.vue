@@ -1,4 +1,3 @@
-<!-- eslint-disable no-unused-vars -->
 <template>
   <q-page
     padding
@@ -10,76 +9,88 @@
           inline-label
           outside-arrows
           mobile-arrows
-          style="max-width:50vw;"
+          class="nav-tabs"
         >
           <q-tab
             icon="home"
             name="toprated"
-            label="Top Rated"
+            :label="MAP.HOME.LABELS.TOP_RATED"
             @click="scrollToElement(toprated)"
           />
           <q-tab
             icon="person"
             name="watched"
-            label="Recent"
+            :label="MAP.HOME.LABELS.RECENT"
             @click="scrollToElement(recent)"
           />
           <q-tab
             icon="person"
             name="upcoming"
-            label="Upcoming"
+            :label="MAP.HOME.LABELS.UPCOMING"
             @click="scrollToElement(upcomin)"
           />
         </q-tabs>
       </div>
-      <div class="q-mb-lg">
+      <section class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold q-mb-md"
-          style="letter-spacing:0.2em"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md section-label"
           ref="toprated"
         >
-          Top Rated
+          {{ MAP.HOME.INTERPOLATIONS.TOP_RATED }}
         </div>
-        <CardSlider api="https://api.jikan.moe/v4/top/anime" />
-      </div>
-      <div class="q-mb-lg">
+        <CardSlider api="top/anime" />
+      </section>
+      <section class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold q-mb-md"
-          style="letter-spacing:0.2em"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md section-label"
           ref="upcomin"
         >
-          Upcoming Anime
+          {{ MAP.HOME.INTERPOLATIONS.UPCOMING }}
         </div>
-        <CardSlider api="https://api.jikan.moe/v4/seasons/upcoming" />
-      </div>
-      <div class="q-mb-lg">
+        <CardSlider api="seasons/upcoming" />
+      </section>
+      <section class="q-mb-lg">
         <div
-          class="flex flex-center text-h6 text-weight-bold q-mb-md"
-          style="letter-spacing:0.2em"
+          class="flex flex-center text-h6 text-weight-bold q-mb-md section-label"
           ref="recent"
         >
-          Recently Released
+          {{ MAP.HOME.INTERPOLATIONS.RECENT }}
         </div>
-        <CardSlider api="https://api.jikan.moe/v4/seasons/now" />
-      </div>
+        <CardSlider api="seasons/now" />
+      </section>
     </div>
   </q-page>
 </template>
 
 <script setup>
-/* eslint-disable */
 import CardSlider from '../components/CardSlider.vue'
+import useComputes from 'src/common/composables/useComputes'
+
 import { scroll } from 'quasar'
 import { ref } from 'vue'
+
 const { getScrollTarget, setVerticalScrollPosition } = scroll
+
+const { MAP } = useComputes()
+
 const upcomin = ref(null)
 const toprated = ref(null)
 const recent = ref(null)
-// takes an element object
+
 function scrollToElement (el) {
+  // @description takes an element object
   const target = getScrollTarget(el)
   const offset = el.offsetTop
   const duration = 500
   setVerticalScrollPosition(target, offset, duration)
 }
 </script>
+
+<style lang="scss" scoped>
+.nav-tabs{
+  max-width:50vw;
+}
+.section-label{
+  letter-spacing:0.2em
+}
+</style>

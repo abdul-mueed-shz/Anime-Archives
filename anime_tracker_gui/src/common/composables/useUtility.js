@@ -9,9 +9,11 @@ export default function useUtility () {
       timeout: duration
     })
   }
+  const errorNotif = (message) => notify(message, 'negative', '1000', 'top')
+  const successNotif = (message) => notify(message, 'positive', '1000', 'top')
   const storage = (information) => {
     localStorage.setItem('email', information.email)
     localStorage.setItem('password', information.password)
   }
-  return { notify, storage }
+  return { notify, storage, errorNotif, successNotif }
 }

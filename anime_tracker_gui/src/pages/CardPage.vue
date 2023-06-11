@@ -6,29 +6,29 @@
   >
     <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
       <q-img
-        :src="animeInformation.value.images?.jpg?.large_image_url ?? 'https://picsum.photos/1920/1080'"
-        style="max-height:350px"
+        :src="animeInformation.value.images?.jpg?.large_image_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ANIME_IMG"
+        class="anime-display-picture"
       />
       <div class="div q-mt-md">
-        <strong>Score: </strong>{{ animeInformation.value.score }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.SCORE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.score }}
       </div>
       <div class="div">
-        <strong>Year: </strong>{{ animeInformation.value.year }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.YEAR }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.year }}
       </div>
       <div class="div">
-        <strong>Rank: </strong>{{ animeInformation.value.rank }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.RANK }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.rank }}
       </div>
       <div class="div">
-        <strong>Airing: </strong>{{ animeInformation.value.airing }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRING }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.airing }}
       </div>
       <div class="div">
-        <strong>Aired:</strong> from {{ aired.from }} to {{ aired.to }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRED }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong> {{ MAP.DETAILS.INTERPOLATIONS.FROM }} {{ aired.from }} {{ MAP.DETAILS.INTERPOLATIONS.TO }} {{ aired.to }}
       </div>
       <div class="div">
-        <strong>Season: </strong>{{ animeInformation.value.season }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.SEASON }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.season }}
       </div>
       <div class="row">
-        <strong>Genre:</strong>
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.GENRE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
         <div
           v-for="genre in animeInformation.value.genres"
           :key="genre.mal_id"
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="row">
-        <strong>Studios:</strong>
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.STUDIOS }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
         <div
           v-for="studio in animeInformation.value.studios"
           :key="studio.mal_id"
@@ -48,13 +48,12 @@
         </div>
       </div>
       <div class="div">
-        <strong>Favorites: </strong>{{ animeInformation.value.favorites }}
+        <strong>{{ MAP.DETAILS.INTERPOLATIONS.FAV }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.favorites }}
       </div>
     </q-card>
     <div class="col-12 col-md q-mt-sm">
       <q-card
-        class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs"
-        style="max-height:95vh"
+        class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs anime-description"
       >
         <q-card-section class="flex flex-center text-h6 text-weight-bolder">
           {{ animeInformation.value.title_english }}
@@ -66,12 +65,12 @@
     </div>
     <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
       <q-video
-        :src="animeInformation.value.trailer?.embed_url ?? 'https://www.youtube.com/embed?v=Xi_xB3a2NZg'"
-        style="max-width:fit-content; margin-left:auto; margin-right:auto;"
+        :src="animeInformation.value.trailer?.embed_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ÁNIME_TRAILER"
+        class="anime-trailer"
       />
       <q-card class="bg-grey-9 q-ma-md">
         <q-card-section class="text-bold">
-          Suggestions
+          {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
         </q-card-section>
         <q-separator
           inset
@@ -105,19 +104,27 @@
 </template>
 
 <script setup>
-import axios from 'axios'
+import useComputes from 'src/common/composables/useComputes'
+import useUtility from 'src/common/composables/useUtility'
+import { jikanApi } from 'src/boot/axios'
 import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { APP_CONSTS } from '../common/constants/app'
 
+const { errorNotif } = useUtility()
+const { MAP } = useComputes()
 const animeId = useRoute().params.id
+
 const animeInformation = reactive({
   value: {}
 })
+
 const aired = reactive({
   from: undefined,
   to: undefined
 })
-axios.get(`https://api.jikan.moe/v4/anime/${animeId}/full`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+
+jikanApi.get(`anime/${animeId}/full`)
   .then(
     result => {
       animeInformation.value = result.data.data
@@ -125,8 +132,21 @@ axios.get(`https://api.jikan.moe/v4/anime/${animeId}/full`, { headers: { 'Access
       aired.to = new Date(animeInformation.value.aired.to)
       aired.from = aired.from.getUTCFullYear() + '/' + (aired.from.getUTCMonth() + 1) + '/' + aired.from.getUTCDate()
       aired.to = aired.to.getUTCFullYear() + '/' + (aired.to.getUTCMonth() + 1) + '/' + aired.to.getUTCDate()
-      console.log(animeInformation.value)
     }
   )
-  .catch(error => console.log(error))
+  .catch(error => errorNotif(error))
 </script>
+
+<style scoped lang="scss">
+.anime-display-picture{
+  max-height:350px
+}
+.anime-description{
+  max-height:95vh
+}
+.anime-trailer{
+  max-width:fit-content;
+  margin-left:auto;
+  margin-right:auto;
+}
+</style>

@@ -12,27 +12,23 @@
     <div class="col">
       <q-scroll-area
         ref="scrollAreaRef"
-        :bar-style="{backgroundColor:'teal',opacity:'0.1'}"
-        :thumb-style="{background:'teal',opacity:'0.9'}"
-        style="height: 500px;"
+        :bar-style="animeSectionConfs.scrollerBarStyle"
+        :thumb-style="animeSectionConfs.scrollerThumbStyle"
+        class="anime__section-scrollarea"
       >
         <div class="row no-wrap">
           <div
             v-for="anime in animeList.value"
             :key="anime"
-            style="width: 300px"
-            class="q-pa-sm"
+            class="q-pa-sm anime__card-width"
           >
             <q-card
+              class="full-height my-background card-confs cursor-pointer"
               @click="goToPage(anime.mal_id)"
-              class="full-height my-background card-confs"
             >
               <q-card-section>
                 <q-img
-                  style="
-                  height: 170px;
-                  object-fit: cover;
-                  "
+                  class="anime__card-img"
                   :src="anime.images.jpg.large_image_url"
                 />
               </q-card-section>
@@ -49,7 +45,7 @@
                 </div>
                 <br>
                 <div class="text-subtitle">
-                  Release Year: <strong>{{ anime.year }}</strong>
+                  {{ MAP.DETAILS.INTERPOLATIONS.RELEASE_YEAR }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} <strong>{{ anime.year }}</strong>
                 </div>
               </q-card-section>
             </q-card>
@@ -71,28 +67,37 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { jikanApi } from 'src/boot/axios'
+import { ROUTE_CONSTS } from 'src/common/constants/routes'
+import useComputes from 'src/common/composables/useComputes'
 
 const router = useRouter()
-let position = 0
+const { MAP } = useComputes()
 const props = defineProps({
   api: {
-    type: String, default: ''
+    type: String,
+    default: ''
   }
-}
-)
+})
+
+let position = 0
+const scrollAreaRef = ref(null)
 const animeList = reactive({
   value: []
 })
-axios.get(props.api, { headers: { 'Access-Control-Allow-Origin': '*' } })
+const animeSectionConfs = reactive({
+  scrollerBarStyle: { backgroundColor: 'teal', opacity: '0.1' },
+  scrollerThumbStyle: { background: 'teal', opacity: '0.9' }
+})
+
+jikanApi.get(props.api)
   .then(res => { animeList.value = res.data.data })
   .catch(err => console.error(err))
 
 function goToPage (animeId) {
-  router.push(`/details/${animeId}`)
+  router.push(`${ROUTE_CONSTS.DETAILS.PATH}${animeId}`)
 }
-const scrollAreaRef = ref(null)
 function animateScroll (direction) {
   const pos = scrollAreaRef.value.getScrollPercentage().left
   if (direction === 'right' && pos < 1) {
@@ -104,12 +109,22 @@ function animateScroll (direction) {
 }
 </script>
 
-  <style lang="scss">
-  .my-background{
-    background-color: #1b1b1b;
-  }
-  .my-background:hover{
-    background-color: $primary;
-  }
+<style lang="scss">
+.anime__section-scrollarea{
+  height: 500px;
+}
+.anime__card-width{
+  width: 300px
+}
+.anime__card-img{
+  height: 170px;
+  object-fit: cover;
+}
+.my-background{
+  background-color: #1b1b1b;
+}
+.my-background:hover{
+  background-color: $primary;
+}
 
-  </style>
+</style>
