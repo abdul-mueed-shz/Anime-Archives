@@ -1,105 +1,110 @@
 <template>
   <q-page
-    class="row text-white bg-black q-gutter-x-md "
-    :class="{'padding_6rem':$q.screen.gt.md}"
+    class="text-white bg-black"
+    :class="{'padding_6rem':$q.screen.gt.md,}"
     padding
   >
-    <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
-      <q-img
-        :src="animeInformation.value.images?.jpg?.large_image_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ANIME_IMG"
-        class="anime-display-picture"
-      />
-      <div class="div q-mt-md">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.SCORE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.score }}
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.YEAR }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.year }}
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.RANK }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.rank }}
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRING }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.airing }}
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRED }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong> {{ MAP.DETAILS.INTERPOLATIONS.FROM }} {{ aired.from }} {{ MAP.DETAILS.INTERPOLATIONS.TO }} {{ aired.to }}
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.SEASON }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.season }}
-      </div>
-      <div class="row">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.GENRE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
-        <div
-          v-for="genre in animeInformation.value.genres"
-          :key="genre.mal_id"
-          class="row"
-        >
-          {{ genre.name }},
-        </div>
-      </div>
-      <div class="row">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.STUDIOS }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
-        <div
-          v-for="studio in animeInformation.value.studios"
-          :key="studio.mal_id"
-          class="row"
-        >
-          {{ studio.name }},
-        </div>
-      </div>
-      <div class="div">
-        <strong>{{ MAP.DETAILS.INTERPOLATIONS.FAV }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.favorites }}
-      </div>
-    </q-card>
-    <div class="col-12 col-md q-mt-sm">
-      <q-card
-        class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs anime-description"
-      >
-        <q-card-section class="flex flex-center text-h6 text-weight-bolder">
-          {{ animeInformation.value.title_english }}
-        </q-card-section>
-        <q-card-section class="flex flex-center text-body2">
-          {{ animeInformation.value.synopsis }}
-        </q-card-section>
-      </q-card>
-    </div>
-    <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
-      <q-video
-        :src="animeInformation.value.trailer?.embed_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ÁNIME_TRAILER"
-        class="anime-trailer"
-      />
-      <q-card class="bg-grey-9 q-ma-md">
-        <q-card-section class="text-bold">
-          {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
-        </q-card-section>
-        <q-separator
-          inset
-          color="grey-6"
+    <section
+      class="row"
+      :class="{'q-gutter-x-md':$q.screen.gt.sm,}"
+    >
+      <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
+        <q-img
+          :src="animeInformation.value.images?.jpg?.large_image_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ANIME_IMG"
+          class="anime-display-picture"
         />
-        <q-card-section>
-          <div class="column">
-            <q-btn
-              dense
-              label="Gintama"
-              color="primary"
-              class="q-mb-sm"
-            />
-            <q-btn
-              dense
-              label="Gintama"
-              color="primary"
-              class="q-mb-sm"
-            />
-            <q-btn
-              dense
-              label="Gintama"
-              color="primary"
-              class="q-mb-sm"
-            />
+        <div class="div q-mt-md">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.SCORE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.score }}
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.YEAR }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.year }}
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.RANK }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.rank }}
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRING }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.airing }}
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.AIRED }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong> {{ MAP.DETAILS.INTERPOLATIONS.FROM }} {{ aired.from }} {{ MAP.DETAILS.INTERPOLATIONS.TO }} {{ aired.to }}
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.SEASON }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.season }}
+        </div>
+        <div class="row">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.GENRE }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
+          <div
+            v-for="genre in animeInformation.value.genres"
+            :key="genre.mal_id"
+            class="row"
+          >
+            {{ genre.name }},
           </div>
-        </q-card-section>
+        </div>
+        <div class="row">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.STUDIOS }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }}</strong>
+          <div
+            v-for="studio in animeInformation.value.studios"
+            :key="studio.mal_id"
+            class="row"
+          >
+            {{ studio.name }},
+          </div>
+        </div>
+        <div class="div">
+          <strong>{{ MAP.DETAILS.INTERPOLATIONS.FAV }}{{ MAP.DETAILS.INTERPOLATIONS.SEPARATOR }} </strong>{{ animeInformation.value.favorites }}
+        </div>
       </q-card>
-    </q-card>
+      <div class="col-12 col-md q-mt-sm">
+        <q-card
+          class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs anime-description"
+        >
+          <q-card-section class="flex flex-center text-h6 text-weight-bolder">
+            {{ animeInformation.value.title_english }}
+          </q-card-section>
+          <q-card-section class="flex flex-center text-body2">
+            {{ animeInformation.value.synopsis }}
+          </q-card-section>
+        </q-card>
+      </div>
+      <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-md">
+        <q-video
+          :src="animeInformation.value.trailer?.embed_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ÁNIME_TRAILER"
+          class="anime-trailer"
+        />
+        <q-card class="bg-grey-9 q-ma-md">
+          <q-card-section class="text-bold">
+            {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
+          </q-card-section>
+          <q-separator
+            inset
+            color="grey-6"
+          />
+          <q-card-section>
+            <div class="column">
+              <q-btn
+                dense
+                label="Gintama"
+                color="primary"
+                class="q-mb-sm"
+              />
+              <q-btn
+                dense
+                label="Gintama"
+                color="primary"
+                class="q-mb-sm"
+              />
+              <q-btn
+                dense
+                label="Gintama"
+                color="primary"
+                class="q-mb-sm"
+              />
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-card>
+    </section>
   </q-page>
 </template>
 

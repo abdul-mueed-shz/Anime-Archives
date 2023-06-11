@@ -21,7 +21,7 @@
             {{ MAP.COMMON.INTERPOLATIONS.APP_TITLE }}
           </div>
         </q-toolbar-title>
-        <div class="row items-center  q-pt-xs">
+        <div class="row items-center q-pt-xs">
           <div>
             <q-select
               class="q-pa-sm"
