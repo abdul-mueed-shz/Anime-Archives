@@ -4,10 +4,27 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from apps.common.utils.app_functions import get_tokens_for_user
-from .serializers import RegistrationSerializer, PasswordChangeSerializer, UserSerializer
-from ..models import User
+from .serializers import RegistrationSerializer, PasswordChangeSerializer, UserSerializer, RightSerializer, \
+    RoleSerializer, UserRoleSerializer
+from ..models import User, Right, UserRole, Role
 
-from apps.common.renderers.CustomRenderer import CustomRenderer
+
+class RightViewSet(ModelViewSet):
+    queryset = Right.objects.all()
+    serializer_class = RightSerializer
+    http_method_names = ['post', 'patch', 'get', 'put', 'delete']
+
+
+class RoleViewSet(ModelViewSet):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    http_method_names = ['post', 'patch', 'get', 'put', 'delete']
+
+
+class UserRoleViewSet(ModelViewSet):
+    queryset = UserRole.objects.all()
+    serializer_class = UserRoleSerializer
+    http_method_names = ['post', 'patch', 'get', 'put', 'delete']
 
 
 class UserViewSet(ModelViewSet):
@@ -72,7 +89,6 @@ class UserViewSet(ModelViewSet):
         #     SIMPLE_JWT['SIGNING_KEY'],
         #     algorithms=[SIMPLE_JWT['ALGORITHM']],
         # )
-        print(request)
         # jwt_authenticator = JWTAuthentication()
         # response = jwt_authenticator.authenticate(request)
         # if response is not None:

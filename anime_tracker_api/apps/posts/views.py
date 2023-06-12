@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import viewsets
 from apps.posts.api.serializers import PostSerializer
 from apps.posts.models import Post
@@ -13,3 +14,7 @@ class PostViewset(viewsets.ModelViewSet):
         'put',
         'patch'
     ]
+
+
+def index(request):
+    return render(request, "index.html")

@@ -8,16 +8,10 @@ from apps.connection.urls import websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-# application = get_asgi_application()
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket':
         URLRouter(
             websocket_urlpatterns
         )
-    # 'websocket': AuthMiddlewareStack(
-    #     URLRouter(
-    #         websocket_urlpatterns
-    #     )
-    # )
 })

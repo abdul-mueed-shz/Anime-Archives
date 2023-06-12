@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import User
+from ..models import User, Right, UserRole, Role
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,12 +19,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-        user = User(email=self.validated_data['email'], date_of_birth=self.validated_data['date_of_birth'],
-                    user_name=self.validated_data['user_name'])
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
         if password != password2:
             raise serializers.ValidationError({'password': 'Passwords must match.'})
+        user = User(email=self.validated_data['email'], date_of_birth=self.validated_data['date_of_birth'],
+                    user_name=self.validated_data['user_name'])
         user.set_password(password)
         user.save()
         return user
@@ -38,3 +38,21 @@ class PasswordChangeSerializer(serializers.Serializer):
         if not self.context['request'].user.check_password(value):
             raise serializers.ValidationError({'current_password': 'Does not match'})
         return value
+
+
+class RightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Right
+        fields = '__all__'
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
+class UserRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserRole
+        fields = '__all__'

@@ -1,14 +1,11 @@
-import datetime
-
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-from django.utils import timezone
+
+from apps.common.models import BaseModel
 
 
-# Create your models here
 class UserManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None):
         """
@@ -61,17 +58,31 @@ class User(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
+        """Does the user have a specific permission?"""
         # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        """Does the user have permissions to view the app `app_label`?"""
         # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
+        """Is the user a member of staff?"""
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+class Right(BaseModel):
+    name = models.CharField(max_length=300, unique=True, blank=False, null=False)
+
+
+class Role(BaseModel):
+    name = models.CharField(max_length=300, unique=True, blank=False, null=False)
+    rights = models.ManyToManyField(Right, related_name='right', blank=False)
+
+
+class UserRole(BaseModel):
+    user = models.ManyToManyField(User, related_name='user_role')
+    role = models.ManyToManyField(Role, related_name='right')
