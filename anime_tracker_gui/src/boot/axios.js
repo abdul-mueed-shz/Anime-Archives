@@ -8,6 +8,7 @@ import axios from 'axios'
 // "export default () => {}" function below (which runs individually
 // for each client)
 const jikanApi = axios.create({ baseURL: 'https://api.jikan.moe/v4/' })
+const archivesApi = axios.create({ baseURL: process.env.DEV ? 'http://127.0.0.1:8002/' : '' })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -16,9 +17,10 @@ export default boot(({ app }) => {
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
-  app.config.globalProperties.$api = jikanApi
+  app.config.globalProperties.$jikanApi = jikanApi
+  app.config.globalProperties.$archivesApi = archivesApi
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 })
 
-export { jikanApi }
+export { jikanApi, archivesApi }

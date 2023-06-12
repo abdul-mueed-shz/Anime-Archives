@@ -12,7 +12,7 @@ const routes = [
     path: ROUTE_CONSTS.LOGIN.PATH,
     component: () => import('layouts/BlankLayout.vue'),
     children: [
-      { path: '', component: () => import('src/pages/LoginPage.vue') }
+      { path: '', component: () => import('src/pages/AuthPage.vue') }
     ]
   },
   {

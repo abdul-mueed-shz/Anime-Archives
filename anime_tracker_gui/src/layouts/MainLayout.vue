@@ -22,8 +22,9 @@
           </div>
         </q-toolbar-title>
         <div class="row items-center q-pt-xs">
-          <div>
+          <div :style="{display: $q.screen.lt.sm? 'none': null }">
             <q-select
+              ref="animeSearchRef"
               class="q-pa-sm"
               dark
               rounded
@@ -67,11 +68,20 @@
               </template>
             </q-select>
           </div>
+          <div :style="{display: $q.screen.lt.sm? 'inline': 'none' }">
+            <q-btn
+              flat
+              dense
+              icon="search"
+              round
+              @click="check"
+            />
+          </div>
           <div>
             <q-avatar
               class="cursor-pointer"
               icon="person"
-              color="primary"
+              color="secondary"
               size="md"
               @click="$router.push(ROUTE_CONSTS.LOGIN.PATH)"
             >
@@ -177,10 +187,15 @@ const router = useRouter()
 
 const { MAP } = useComputes()
 
+const animeSearchRef = ref(null)
 const leftDrawerOpen = ref(false)
 const selectedQuery = ref('')
 const stringOptions = []
 const options = ref(stringOptions)
+
+function check () {
+  console.log(animeSearchRef.value.showPopup())
+}
 
 function filterFn (query, update, abort) {
   if (query.length < 2) {
