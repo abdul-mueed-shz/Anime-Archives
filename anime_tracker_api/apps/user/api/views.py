@@ -50,35 +50,24 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['post'], url_name='register', url_path='register')
     def register_user(self, request):
         serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        raise exceptions.NotAcceptable()
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_name='login', url_path='login')
     def login_user(self, request):
-        if 'email' not in request.data or 'password' not in request.data:
+        email = request.data.get('email')
+        password = request.data.get('password')
+        if not email or not password:
             return Response({'message': 'Credentials missing'}, status=status.HTTP_400_BAD_REQUEST)
-        email = request.POST['email']
-        password = request.POST['password']
+
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             auth_data = get_tokens_for_user(request.user)
-            return Response({'message': 'Login Success', **auth_data}, status=status.HTTP_200_OK)
-        raise exceptions.NotAuthenticated()
-
-    @action(detail=False, methods=['post'], url_name='login', url_path='login')
-    def login_user(self, request):
-        if 'email' not in request.data or 'password' not in request.data:
-            return Response({'message': 'Credentials missing'}, status=status.HTTP_400_BAD_REQUEST)
-        email = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            auth_data = get_tokens_for_user(request.user)
-            return Response({'message': {'details': 'Login Success', **auth_data}}, status=status.HTTP_200_OK)
+            user = UserSerializer(user)
+            return Response({'message': 'Login Success', 'user': user.data, **auth_data},
+                            status=status.HTTP_200_OK)
         raise exceptions.NotAuthenticated()
 
     @action(detail=False, methods=['post'], url_name='token-refresh2', url_path='token-refresh2')

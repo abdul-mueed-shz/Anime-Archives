@@ -21,7 +21,7 @@
                 dense
                 dark
                 label="User Name"
-                v-model="authForm.userName"
+                v-model="authForm.user_name"
                 clearable
                 lazy-rules="ondemand"
                 :rules="[ val => val && val.length > 0 || 'Username is required']"
@@ -49,7 +49,7 @@
                 dense
                 dark
                 label="Date of Birth"
-                v-model="authForm.dob"
+                v-model="authForm.date_of_birth"
                 clearable
                 readonly
                 lazy-rules="ondemand"
@@ -69,7 +69,7 @@
                     >
                       <q-date
                         landscape
-                        v-model="authForm.dob"
+                        v-model="authForm.date_of_birth"
                       />
                     </q-popup-proxy>
                   </q-icon>
@@ -115,16 +115,16 @@
                 <strong
                   @click="()=>auth.selectedAction=!auth.selectedAction"
                   style="text-decoration: underline;"
-                ><span v-if="auth.selectedAction===auth.login">Sign Up</span><span v-else-if="auth.selectedAction===auth.signup"><q-icon
+                ><span v-if="auth.selectedAction===auth.login">Sign Up</span><span v-else-if="auth.selectedAction===auth.signup"><q-btn
                   round
-                  name="arrow_back"
+                  icon="arrow_back"
                   color="primary"
                   size="md"
                 >
                   <q-tooltip>
                     Login
                   </q-tooltip>
-                </q-icon></span></strong>
+                </q-btn></span></strong>
               </div>
               <router-link
                 v-if="auth.selectedAction===auth.login"
@@ -168,13 +168,14 @@ import useUtility from '../common/composables/useUtility'
 import { ROUTE_CONSTS } from 'src/common/constants/routes'
 import { APP_CONSTS } from 'src/common/constants/app'
 import useComputes from 'src/common/composables/useComputes'
+import { useStore } from 'vuex'
 
 const $router = useRouter()
+const store = useStore()
 
 const { MAP } = useComputes()
 const {
-  // successNotif,
-  // storage,
+  successNotif,
   errorNotif
 } = useUtility()
 
@@ -182,8 +183,8 @@ const authForm = ref({
   email: null,
   password: null,
   password2: null,
-  userName: null,
-  dob: null
+  user_name: null,
+  date_of_birth: null
 })
 
 const auth = ref({
@@ -191,14 +192,25 @@ const auth = ref({
   signup: true,
   selectedAction: false
 })
-
 function authenticate () {
-  if (APP_CONSTS.REGEX.VALID_EMAIL_CHECK.test(authForm.value.email)) {
-    // successNotif(MAP.value.AUTH.MESSAGES.LOGGED_IN)
-    // storage({ email: authForm.value.email, password: authForm.value.password })
-    $router.push(ROUTE_CONSTS.HOME.PATH)
+  if (!APP_CONSTS.REGEX.VALID_EMAIL_CHECK.test(authForm.value.email)) {
+    return errorNotif(MAP.value.ERRORS.AUTH.INVALID_EMAIL)
+  }
+  const payload = structuredClone(authForm.value)
+  if (auth.value.selectedAction === auth.value.signup) {
+    payload.date_of_birth = payload.date_of_birth.replace(/\//g, '-')
+    store.dispatch('auth/register', payload).then(() => {
+      auth.value.selectedAction = auth.value.login
+      successNotif('Successfully registered')
+    }).catch(() => errorNotif('Something went wrong'))
     return
   }
-  errorNotif(MAP.value.ERRORS.AUTH.INVALID_EMAIL)
+  delete payload.date_of_birth
+  delete payload.user_name
+  delete payload.password2
+  store.dispatch('auth/login', payload).then(res => {
+    successNotif(res.message)
+    $router.push(ROUTE_CONSTS.HOME.PATH)
+  }).catch(() => errorNotif('Something went wrong'))
 }
 </script>

@@ -7,8 +7,13 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
+const appVer = 'api/v1/'
+
+const archivesBaseUrl = (process.env.DEV ? 'http://127.0.0.1:8002/' : '') + appVer // TODO: ADD PRODUCTION LINK WHEN BACKEND IS HOSTED
+
 const jikanApi = axios.create({ baseURL: 'https://api.jikan.moe/v4/' })
-const archivesApi = axios.create({ baseURL: process.env.DEV ? 'http://127.0.0.1:8002/' : '' })
+
+const archivesApi = axios.create({ baseURL: archivesBaseUrl })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

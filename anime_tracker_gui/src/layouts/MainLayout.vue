@@ -78,17 +78,82 @@
             />
           </div>
           <div>
-            <q-avatar
-              class="cursor-pointer"
-              icon="person"
+            <q-btn
+              v-if="authDetails.tokens.access"
               color="secondary"
-              size="md"
+              icon="person"
+              size="sm"
+              round
+            >
+              <q-menu>
+                <div
+                  style="width:400px"
+                  class="row no-wrap q-pa-md"
+                >
+                  <div class="column">
+                    <div class="text-h6 text-primary text-weight-medium">
+                      Account Details
+                    </div>
+                    <div class="row">
+                      <div class="text-primary text-weight-bolder q-pr-xs">
+                        Email:
+                      </div>
+                      <div>
+                        {{ authDetails.userProfile.email }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="text-primary text-weight-bolder q-pr-xs">
+                        DOB:
+                      </div>
+                      <div>
+                        {{ authDetails.userProfile.date_of_birth }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <q-separator
+                    vertical
+                    inset
+                    class="q-mx-lg"
+                  />
+
+                  <div class="column items-center">
+                    <!-- <q-avatar size="72px">
+                      <img src="https://cdn.quasar.dev/img/avatar4.jpg">
+                    </q-avatar> -->
+
+                    <div class="text-subtitle1 text-grey-8 text-weight-bolder ellipsis">
+                      Username
+                    </div>
+                    <div class="text-subtitle1 q-mb-xs ellipsis">
+                      {{ authDetails.userProfile.user_name }}
+                    </div>
+
+                    <q-btn
+                      color="primary"
+                      label="Logout"
+                      push
+                      size="sm"
+                      @click="logout"
+                      v-close-popup
+                    />
+                  </div>
+                </div>
+              </q-menu>
+            </q-btn>
+            <q-btn
+              v-else
+              class="cursor-pointer"
+              icon="login"
+              flat
+              round
               @click="$router.push(ROUTE_CONSTS.LOGIN.PATH)"
             >
               <q-tooltip>
                 {{ MAP.COMMON.TOOLTIPS.LOGIN }}
               </q-tooltip>
-            </q-avatar>
+            </q-btn>
           </div>
         </div>
       </q-toolbar>
@@ -178,12 +243,17 @@
 <script setup>
 import { jikanApi } from 'src/boot/axios'
 import useComputes from 'src/common/composables/useComputes'
+import useUtility from 'src/common/composables/useUtility'
 import { APP_CONSTS } from 'src/common/constants/app'
 import { ROUTE_CONSTS } from 'src/common/constants/routes'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRouter()
+const store = useStore()
+
+const authDetails = computed(() => store.getters['auth/getAuthDetails'])
 
 const { MAP } = useComputes()
 
@@ -193,8 +263,15 @@ const selectedQuery = ref('')
 const stringOptions = []
 const options = ref(stringOptions)
 
-function check () {
-  console.log(animeSearchRef.value.showPopup())
+const {
+  successNotif,
+  errorNotif
+} = useUtility()
+
+function logout () {
+  store.dispatch('auth/logout').then(res => {
+    successNotif(res.message)
+  }).catch(err => errorNotif(err))
 }
 
 function filterFn (query, update, abort) {

@@ -18,4 +18,10 @@ DATABASES = {
         # 'PORT': '3306',
     }
 }
-# anime-api
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = ['*']
+# CORS_ORIGIN_WHITELIST = ('http://localhost:5000',)
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3030',
+# ]
