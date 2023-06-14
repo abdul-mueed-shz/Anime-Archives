@@ -48,6 +48,7 @@ ANIME_TRACKER_APPS = [
     'apps.user.apps.UserConfig',
     'apps.watchlist.apps.WatchlistConfig',
     'apps.posts.apps.PostsConfig',
+    'apps.anime.apps.AnimeConfig'
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + ANIME_TRACKER_APPS

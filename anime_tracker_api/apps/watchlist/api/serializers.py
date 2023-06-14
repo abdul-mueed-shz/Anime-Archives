@@ -1,17 +1,19 @@
 from rest_framework import serializers
 
-from apps.watchlist.models import WatchList
+from apps.anime.api.serializer import AnimeSerializer
+from apps.watchlist.models import WatchList, WatchlistAnime
 
 
 class WatchlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchList
-        fields = [
-            'id',
-            'user',
-            'name',
-            'anime_list'
-        ]
+        fields = '__all__'
+
+
+class WatchlistAnimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WatchlistAnime
+        fields = '__all__'
 
 
 class SingleKeyListField(serializers.Field):
