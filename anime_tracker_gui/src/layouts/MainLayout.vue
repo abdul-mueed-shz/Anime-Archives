@@ -179,6 +179,19 @@
           <q-item
             clickable
             v-ripple
+            @click="$router.replace(ROUTE_CONSTS.HOME.PATH)"
+          >
+            <q-item-section avatar>
+              <q-icon name="dashboard" />
+            </q-item-section>
+
+            <q-item-section>
+              Dashboard
+            </q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
           >
             <q-item-section avatar>
               <q-icon name="account_circle" />
@@ -193,7 +206,7 @@
             v-ripple
           >
             <q-item-section avatar>
-              <q-icon name="dashboard" />
+              <q-icon name="wallpaper" />
             </q-item-section>
 
             <q-item-section>
@@ -203,6 +216,7 @@
           <q-item
             clickable
             v-ripple
+            @click="$router.push(ROUTE_CONSTS.WATCHLIST.PATH)"
           >
             <q-item-section avatar>
               <q-icon name="view_list" />

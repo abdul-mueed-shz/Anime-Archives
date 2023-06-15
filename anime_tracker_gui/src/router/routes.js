@@ -5,7 +5,15 @@ const routes = [
     path: ROUTE_CONSTS.HOME.PATH,
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('src/pages/HomePage.vue') }
+      { path: '', component: () => import('src/pages/HomePage.vue') },
+      {
+        path: ROUTE_CONSTS.DETAILS.PATH + ':id',
+        component: () => import('src/pages/CardPage.vue')
+      },
+      {
+        path: ROUTE_CONSTS.WATCHLIST.PATH,
+        component: () => import('src/pages/WatchList.vue')
+      }
     ]
   },
   {
@@ -13,13 +21,6 @@ const routes = [
     component: () => import('layouts/BlankLayout.vue'),
     children: [
       { path: '', component: () => import('src/pages/AuthPage.vue') }
-    ]
-  },
-  {
-    path: ROUTE_CONSTS.DETAILS.PATH + ':id',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('src/pages/CardPage.vue') }
     ]
   },
 

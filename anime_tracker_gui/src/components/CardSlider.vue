@@ -1,6 +1,9 @@
 <template>
   <div class="row">
-    <div class="flex flex-center">
+    <div
+      v-if="animeList.value.length"
+      class="flex flex-center"
+    >
       <q-btn
         round
         color="primary"
@@ -16,15 +19,30 @@
         :thumb-style="animeSectionConfs.scrollerThumbStyle"
         class="anime__section-scrollarea"
       >
-        <div class="row no-wrap">
+        <div
+          class="row no-wrap"
+        >
           <div
+            class="loader-border anime__section-scrollarea column flex-center full-width"
+            v-if="!animeList.value.length"
+          >
+            <q-spinner-cube
+              color="primary"
+              size="8.5em"
+            />
+            <div class="q-pt-md text-h6">
+              Loading...
+            </div>
+          </div>
+          <div
+            v-else
             v-for="anime in animeList.value"
             :key="anime"
             class="q-pa-sm anime__card-width"
           >
             <q-card
               :class="{'card-border':!$q.dark.isActive}"
-              class="shdaow-24 full-height my-background card-confs cursor-pointer"
+              class="full-height my-background card-confs cursor-pointer"
               @click="goToPage(anime.mal_id)"
             >
               <q-card-section>
@@ -54,7 +72,10 @@
         </div>
       </q-scroll-area>
     </div>
-    <div class="flex flex-center">
+    <div
+      v-if="animeList.value.length"
+      class="flex flex-center"
+    >
       <q-btn
         round
         color="primary"
