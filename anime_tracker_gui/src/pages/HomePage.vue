@@ -1,7 +1,6 @@
 <template>
   <q-page
     padding
-    class="bg-black text-white"
   >
     <div class="column">
       <div class="row q-ma-md flex-center">
@@ -67,7 +66,8 @@ import CardSlider from '../components/CardSlider.vue'
 import useComputes from 'src/common/composables/useComputes'
 
 import { scroll } from 'quasar'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { archivesApi } from 'src/boot/axios'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -84,6 +84,11 @@ function scrollToElement (el) {
   const duration = 500
   setVerticalScrollPosition(target, offset, duration)
 }
+
+onMounted(() => {
+  archivesApi.get('watchlist/get-playlists/')
+})
+
 </script>
 
 <style lang="scss" scoped>

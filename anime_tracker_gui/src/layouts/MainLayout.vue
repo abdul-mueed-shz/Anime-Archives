@@ -1,18 +1,18 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-header class="bg-black">
-      <q-toolbar>
+    <q-header>
+      <q-toolbar :class="{'bg-dark':$q.dark.isActive}">
         <q-btn
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
+          @click="drawer = !drawer"
         />
 
         <q-toolbar-title
-          class="text-primary text-bold"
+          class="text-bold"
         >
           <div
             class="my-clickable"
@@ -26,7 +26,6 @@
             <q-select
               ref="animeSearchRef"
               class="q-pa-sm"
-              dark
               rounded
               dense
               outlined
@@ -64,7 +63,10 @@
                 </div>
               </template>
               <template #prepend>
-                <q-icon name="search" />
+                <q-icon
+                  color="white"
+                  name="search"
+                />
               </template>
             </q-select>
           </div>
@@ -89,6 +91,7 @@
                 <div
                   style="width:400px"
                   class="row no-wrap q-pa-md"
+                  :class="{'card-border':!$q.dark.isActive}"
                 >
                   <div class="column">
                     <div class="text-h6 text-primary text-weight-medium">
@@ -123,7 +126,7 @@
                       <img src="https://cdn.quasar.dev/img/avatar4.jpg">
                     </q-avatar> -->
 
-                    <div class="text-subtitle1 text-grey-8 text-weight-bolder ellipsis">
+                    <div class="text-subtitle1 text-weight-bolder ellipsis">
                       Username
                     </div>
                     <div class="text-subtitle1 q-mb-xs ellipsis">
@@ -160,16 +163,107 @@
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
-      :show-if-above="false"
-      class="bg-dark"
-    />
+      v-model="drawer"
+      show-if-above
+      :class="{'light-border-right':!$q.dark.isActive}"
+      :mini="!drawer || miniState"
+      @click.capture="drawerClick"
+      :width="200"
+      :breakpoint="500"
+    >
+      <q-scroll-area
+        class="fit"
+        :horizontal-thumb-style="{ opacity: 0 }"
+      >
+        <q-list padding>
+          <q-item
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon name="account_circle" />
+            </q-item-section>
+
+            <q-item-section>
+              Account
+            </q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon name="dashboard" />
+            </q-item-section>
+
+            <q-item-section>
+              Wall
+            </q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon name="view_list" />
+            </q-item-section>
+
+            <q-item-section>
+              Watchlist
+            </q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon name="groups" />
+            </q-item-section>
+
+            <q-item-section>
+              Friends
+            </q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon name="settings" />
+            </q-item-section>
+
+            <q-item-section>
+              Settings
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
+
+      <!--
+          in this case, we use a button (can be anything)
+          so that user can switch back
+          to mini-mode
+        -->
+      <div
+        class="q-mini-drawer-hide absolute"
+        style="top: 15px; right: -17px"
+      >
+        <q-btn
+          dense
+          round
+          unelevated
+          color="secondary"
+          icon="chevron_left"
+          @click="miniState = true"
+        />
+      </div>
+    </q-drawer>
 
     <q-page-container>
       <router-view :key="$route.fullPath" />
     </q-page-container>
 
-    <q-footer class="bg-black q-pt-sm">
+    <q-footer class="q-pt-sm">
       <div class=" flex flex-center q-pa-xs">
         <q-btn
           round
@@ -249,16 +343,29 @@ import { ROUTE_CONSTS } from 'src/common/constants/routes'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
+
+const drawer = ref(false)
+const miniState = ref(false)
+
+function drawerClick (e) {
+  if (miniState.value) {
+    miniState.value = false
+    e.stopPropagation()
+  }
+}
 
 const router = useRouter()
 const store = useStore()
+const $q = useQuasar()
+
+$q.dark.set(true)
 
 const authDetails = computed(() => store.getters['auth/getAuthDetails'])
 
 const { MAP } = useComputes()
 
 const animeSearchRef = ref(null)
-const leftDrawerOpen = ref(false)
 const selectedQuery = ref('')
 const stringOptions = []
 const options = ref(stringOptions)
@@ -294,9 +401,6 @@ function goToPage (animeId) {
   router.push(`${ROUTE_CONSTS.DETAILS.PATH}${animeId}`)
   selectedQuery.value = ''
 }
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
 
 </script>
 
@@ -313,12 +417,12 @@ function toggleLeftDrawer () {
   /* width */
   ::-webkit-scrollbar {
   width: 11px;
-  background-color: black;
+  // background-color: black;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(26, 26, 26);
+  // box-shadow: inset 0 0 5px rgb(26, 26, 26);
   border-radius: 5.5px;
 }
 
@@ -330,6 +434,6 @@ function toggleLeftDrawer () {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #a50000;
+  background: $secondary;
 }
 </style>

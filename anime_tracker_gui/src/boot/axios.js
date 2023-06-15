@@ -15,8 +15,17 @@ const jikanApi = axios.create({ baseURL: 'https://api.jikan.moe/v4/' })
 
 const archivesApi = axios.create({ baseURL: archivesBaseUrl })
 
-export default boot(({ app }) => {
+export default boot(({ app, store }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
+  archivesApi.interceptors.request.use((config) => {
+    const accessToken = store.getters['auth/getAuthDetails'].tokens?.access
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
+    }
+    return config
+  }, (error) => {
+    throw new Error(error)
+  })
 
   app.config.globalProperties.$axios = axios
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)

@@ -23,7 +23,8 @@
             class="q-pa-sm anime__card-width"
           >
             <q-card
-              class="full-height my-background card-confs cursor-pointer"
+              :class="{'card-border':!$q.dark.isActive}"
+              class="shdaow-24 full-height my-background card-confs cursor-pointer"
               @click="goToPage(anime.mal_id)"
             >
               <q-card-section>
@@ -119,12 +120,6 @@ function animateScroll (direction) {
 .anime__card-img{
   height: 170px;
   object-fit: cover;
-}
-.my-background{
-  background-color: #1b1b1b;
-}
-.my-background:hover{
-  background-color: $primary;
 }
 
 </style>

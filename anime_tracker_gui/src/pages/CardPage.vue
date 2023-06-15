@@ -1,6 +1,5 @@
 <template>
   <q-page
-    class="text-white bg-black"
     :class="{'padding_6rem':$q.screen.gt.md,}"
     padding
   >
@@ -8,7 +7,10 @@
       class="row"
       :class="{'q-gutter-x-md':$q.screen.gt.sm,}"
     >
-      <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-sm">
+      <q-card
+        :class="lightCardBorder"
+        class="col-12 col-md-3 q-pa-md card-confs q-mt-sm"
+      >
         <q-img
           :src="animeInformation.value.images?.jpg?.large_image_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ANIME_IMG"
           class="anime-display-picture"
@@ -57,7 +59,8 @@
       </q-card>
       <div class="col-12 col-md q-mt-sm">
         <q-card
-          class=" col-12 col-md bg-dark full-height q-pa-sm  q-my-xs overflow-auto card-confs anime-description"
+          :class="lightCardBorder"
+          class="full-height q-pa-sm  q-my-xs overflow-auto card-confs anime-description"
         >
           <q-card-section class="flex flex-center text-h6 text-weight-bolder">
             {{ animeInformation.value.title_english }}
@@ -67,12 +70,15 @@
           </q-card-section>
         </q-card>
       </div>
-      <q-card class="col-12 col-md-3 bg-grey-10 q-pa-md card-confs q-mt-md">
+      <q-card
+        :class="lightCardBorder"
+        class="col-12 col-md-3 q-pa-md card-confs q-mt-md"
+      >
         <q-video
           :src="animeInformation.value.trailer?.embed_url ?? APP_CONSTS.PLACEHOLDERS.CARD_PAGE.ÁNIME_TRAILER"
           class="anime-trailer"
         />
-        <q-card class="bg-grey-9 q-ma-md">
+        <q-card class="q-ma-md">
           <q-card-section class="text-bold">
             {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
           </q-card-section>
@@ -117,7 +123,7 @@ import { useRoute } from 'vue-router'
 import { APP_CONSTS } from '../common/constants/app'
 
 const { errorNotif } = useUtility()
-const { MAP } = useComputes()
+const { MAP, isDarkMode } = useComputes()
 const animeId = useRoute().params.id
 
 const animeInformation = reactive({
@@ -128,6 +134,8 @@ const aired = reactive({
   from: undefined,
   to: undefined
 })
+
+const lightCardBorder = { 'card-border': !isDarkMode.value }
 
 jikanApi.get(`anime/${animeId}/full`)
   .then(
@@ -144,13 +152,15 @@ jikanApi.get(`anime/${animeId}/full`)
 
 <style scoped lang="scss">
 .anime-display-picture{
-  max-height:350px
+  max-height:350px;
+  object-fit:contain
 }
 .anime-description{
   max-height:95vh
 }
 .anime-trailer{
-  max-width:fit-content;
+  // max-width:fit-content;
+  object-fit: contain;
   margin-left:auto;
   margin-right:auto;
 }

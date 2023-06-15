@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row bg-black">
+  <q-page class="row ">
     <div class="col-12 col-sm-8 flex-center flex q-pa-lg">
       <div
         class="full-width "
