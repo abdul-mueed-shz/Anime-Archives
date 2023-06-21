@@ -79,35 +79,54 @@
           class="anime-trailer"
         />
         <q-card class="q-ma-md">
-          <q-card-section class="text-bold">
-            {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
-          </q-card-section>
-          <q-separator
-            inset
-            color="grey-6"
-          />
-          <q-card-section>
-            <div class="column">
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-            </div>
-          </q-card-section>
+          <q-card-actions align="center">
+            <q-btn
+              label="Add to watchlist"
+              icon="add"
+              color="primary"
+              class="border-radius__8px"
+              @click="addToWatchlist"
+            />
+          </q-card-actions>
+          <div v-if="false">
+            <q-separator
+              inset
+              color="grey-6"
+              class="q-mt-md"
+            />
+            <q-card-section class="text-bold">
+              {{ MAP.DETAILS.INTERPOLATIONS.RECOMMENDATIONS }}
+            </q-card-section>
+            <q-separator
+              inset
+              color="grey-6"
+            />
+            <q-card-section>
+              <div class="column">
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+              </div>
+            </q-card-section>
+          </div>
         </q-card>
       </q-card>
     </section>
@@ -118,13 +137,19 @@
 import useComputes from 'src/common/composables/useComputes'
 import useUtility from 'src/common/composables/useUtility'
 import { jikanApi } from 'src/boot/axios'
-import { reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { APP_CONSTS } from '../common/constants/app'
+import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
+import WatchlistDialog from 'src/components/WatchlistDialog.vue'
 
-const { errorNotif } = useUtility()
-const { MAP, isDarkMode } = useComputes()
+const store = useStore()
+const $q = useQuasar()
 const animeId = useRoute().params.id
+const { MAP, isDarkMode } = useComputes()
+const { errorNotif } = useUtility()
+const lightCardBorder = { 'card-border': !isDarkMode.value }
 
 const animeInformation = reactive({
   value: {}
@@ -134,8 +159,20 @@ const aired = reactive({
   from: undefined,
   to: undefined
 })
+const watchlistDialogRef = ref(null)
 
-const lightCardBorder = { 'card-border': !isDarkMode.value }
+const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
+
+const addToWatchlist = () => {
+  if (isLoggedIn.value) {
+    watchlistDialogRef.value = $q.dialog({
+      component: WatchlistDialog,
+      componentProps: {}
+    }).onOk((res) => {
+      console.log(res)
+    })
+  }
+}
 
 jikanApi.get(`anime/${animeId}/full`)
   .then(
@@ -151,6 +188,9 @@ jikanApi.get(`anime/${animeId}/full`)
 </script>
 
 <style scoped lang="scss">
+.border-radius__8px{
+  border-radius: 8px;
+}
 .anime-display-picture{
   max-height:350px;
   object-fit:contain

@@ -76,12 +76,11 @@
               dense
               icon="search"
               round
-              @click="check"
             />
           </div>
           <div>
             <q-btn
-              v-if="authDetails.tokens.access"
+              v-if="isLoggedIn"
               color="secondary"
               icon="person"
               size="sm"
@@ -373,8 +372,9 @@ const router = useRouter()
 const store = useStore()
 const $q = useQuasar()
 
-$q.dark.set(true)
+// $q.dark.set(true)
 
+const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
 const authDetails = computed(() => store.getters['auth/getAuthDetails'])
 
 const { MAP } = useComputes()
@@ -383,7 +383,6 @@ const animeSearchRef = ref(null)
 const selectedQuery = ref('')
 const stringOptions = []
 const options = ref(stringOptions)
-
 const {
   successNotif,
   errorNotif

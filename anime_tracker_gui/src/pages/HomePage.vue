@@ -66,8 +66,11 @@ import CardSlider from '../components/CardSlider.vue'
 import useComputes from 'src/common/composables/useComputes'
 
 import { scroll } from 'quasar'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { archivesApi } from 'src/boot/axios'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -76,6 +79,8 @@ const { MAP } = useComputes()
 const upcomin = ref(null)
 const toprated = ref(null)
 const recent = ref(null)
+
+const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
 
 function scrollToElement (el) {
   // @description takes an element object
@@ -86,7 +91,7 @@ function scrollToElement (el) {
 }
 
 onMounted(() => {
-  archivesApi.get('watchlist/get-playlists/')
+  if (isLoggedIn.value) { archivesApi.get('watchlist/get-playlists/') }
 })
 
 </script>
