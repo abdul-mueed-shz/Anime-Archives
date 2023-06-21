@@ -373,7 +373,7 @@ const router = useRouter()
 const store = useStore()
 const $q = useQuasar()
 
-$q.dark.set(true)
+// $q.dark.set(true)
 
 const authDetails = computed(() => store.getters['auth/getAuthDetails'])
 
