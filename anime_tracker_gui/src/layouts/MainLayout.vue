@@ -164,7 +164,7 @@
 
     <q-drawer
       v-model="drawer"
-      show-if-above
+      :show-if-above="false"
       :class="{'light-border-right':!$q.dark.isActive}"
       :mini="!drawer || miniState"
       @click.capture="drawerClick"
@@ -373,7 +373,7 @@ const router = useRouter()
 const store = useStore()
 const $q = useQuasar()
 
-// $q.dark.set(true)
+$q.dark.set(true)
 
 const authDetails = computed(() => store.getters['auth/getAuthDetails'])
 
