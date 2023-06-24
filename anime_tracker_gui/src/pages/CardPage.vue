@@ -136,7 +136,7 @@
 <script setup>
 import useComputes from 'src/common/composables/useComputes'
 import useUtility from 'src/common/composables/useUtility'
-import { jikanApi } from 'src/boot/axios'
+import { archivesApi, jikanApi } from 'src/boot/axios'
 import { computed, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { APP_CONSTS } from '../common/constants/app'
@@ -167,9 +167,22 @@ const addToWatchlist = () => {
   if (isLoggedIn.value) {
     watchlistDialogRef.value = $q.dialog({
       component: WatchlistDialog,
-      componentProps: {}
-    }).onOk((res) => {
-      console.log(res)
+      componentProps: {
+        malId: animeInformation.value?.mal_id
+      }
+    }).onOk(({ selectedWatchlists, payload = null }) => {
+      // console.log(animeInformation.value?.mal_id)
+      // console.log(animeInformation.value?.title_english)
+      // console.log(animeInformation.value?.images?.jpg?.large_image_url)
+      archivesApi.post('/anime/', {
+        mal_id: animeInformation.value?.mal_id,
+        name: animeInformation.value?.title_english,
+        thumbnail: animeInformation.value?.images?.jpg?.large_image_url
+      }).then(res => {
+        console.log(res.data.body)
+        console.log(selectedWatchlists)
+        console.log(payload)
+      })
     })
   }
 }
@@ -188,9 +201,6 @@ jikanApi.get(`anime/${animeId}/full`)
 </script>
 
 <style scoped lang="scss">
-.border-radius__8px{
-  border-radius: 8px;
-}
 .anime-display-picture{
   max-height:350px;
   object-fit:contain

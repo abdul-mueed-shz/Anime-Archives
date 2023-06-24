@@ -15,9 +15,10 @@
 .loader-border{
   border-bottom: 1px solid $primary;
 }
-// .my-background{
-//   @extend .card-border
-// }
+
+.border-radius__8px{
+  border-radius: 8px;
+}
 .my-background:hover{
   background-color: $primary;
   color: white !important;

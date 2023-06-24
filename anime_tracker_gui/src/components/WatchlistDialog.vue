@@ -9,12 +9,12 @@
     >
       <q-card-section v-if="!userWatchListRows || !userWatchListRows.length">
         <div class="q-pa-md">
-          <q-markup-table>
+          <q-markup-table class="bg-grey-5">
             <thead>
               <tr>
                 <th
                   class="text-left"
-                  style="width: 150px"
+                  style="width: 140px"
                 >
                   <q-skeleton
                     animation="blink"
@@ -47,6 +47,7 @@
                 </th>
                 <th class="text-right">
                   <q-skeleton
+                    width="50px"
                     animation="blink"
                     type="text"
                   />
@@ -63,7 +64,7 @@
                   <q-skeleton
                     animation="blink"
                     type="text"
-                    width="85px"
+                    width="50px"
                   />
                 </td>
                 <td class="text-right">
@@ -98,7 +99,7 @@
                   <q-skeleton
                     animation="blink"
                     type="text"
-                    width="85px"
+                    width="50px"
                   />
                 </td>
               </tr>
@@ -132,6 +133,7 @@
                 v-if="!addWatchlist"
               >
                 <q-btn
+                  :disable="!!selected.length"
                   icon="add"
                   color="positive"
                   size="sm"
@@ -218,12 +220,13 @@
           <template #body="props">
             <q-tr
               :props="props"
-              @click="props.selected = true"
             >
               <q-td>
                 <q-checkbox
                   v-model="props.selected"
+                  @click="props.selected = !props.selected"
                   color="primary"
+                  :disable="props.row.anime_list.some(anime=>anime.malId===malId)"
                 />
               </q-td>
               <q-td
@@ -256,6 +259,7 @@
                   color="negative"
                   flat
                   @click="deleteWatchlist(props.row.id)"
+                  :disable="!!selected.length"
                 >
                   <q-tooltip>
                     Delete Watchlist
@@ -331,6 +335,7 @@
                           color="negative"
                           flat
                           @click="deleteAnime(animeProps.row.id)"
+                          :disable="!!selected.length"
                         >
                           <q-tooltip>
                             Delete Anime
@@ -344,18 +349,23 @@
             </q-tr>
           </template>
         </q-table>
-        <!-- v-model:pagination="pagination" -->
       </q-card-section>
-      <q-card-actions align="right">
+      <q-card-actions
+        align="right"
+        class="q-pb-md"
+      >
         <q-btn
-          color="primary"
-          label="OK"
-          @click="onDialogOK"
+          color="positive"
+          label="Add To Watchlist"
+          @click="addToWatchlist(selected)"
+          class="border-radius__8px"
         />
         <q-btn
-          color="primary"
+          color="negative"
+          flat
           label="Cancel"
           @click="onDialogCancel"
+          class="border-radius__8px"
         />
       </q-card-actions>
     </q-card>
@@ -368,14 +378,30 @@ import { archivesApi } from 'src/boot/axios'
 import { onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import useUtility from '../common/composables/useUtility'
-import ReviewDialog from './ReviewDialog.vue'
+import AnimeDialog from './AnimeDialog.vue'
 
 // eslint-disable-next-line no-unused-vars
 const emits = defineEmits([...useDialogPluginComponent.emits])
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+// eslint-disable-next-line no-unused-vars
+const componentProps = defineProps({
+  malId: {
+    type: Number,
+    required: true
+  }
+})
+
+const {
+  dialogRef,
+  onDialogHide,
+  onDialogOK,
+  onDialogCancel
+} = useDialogPluginComponent()
+
 const { errorNotif, successNotif } = useUtility()
 
 const store = useStore()
+
 const $q = useQuasar()
 
 const userWatchListRows = ref(null)
@@ -443,11 +469,13 @@ const animeListColumns = [
 ]
 
 const addWatchlist = ref(false)
+
 const watchlistData = ref({
   name: null
 })
 
-const reviewDialogRef = ref(null)
+const animeDialogRef = ref(null)
+
 const selected = ref([])
 
 onMounted(() => {
@@ -455,6 +483,7 @@ onMounted(() => {
     userWatchListRows.value = res
   })
 })
+
 const createWatchlist = (data) => {
   if (!watchlistData.value.name) { return }
   archivesApi.post('watchlist/', data).then(() => {
@@ -465,6 +494,7 @@ const createWatchlist = (data) => {
     })
   }).catch(() => errorNotif('Unable to create the watchlist'))
 }
+
 const deleteWatchlist = (watchlistId) => {
   archivesApi.delete(`watchlist/${watchlistId}`).then(() => {
     successNotif('Successfully deleted the watchlist')
@@ -473,6 +503,7 @@ const deleteWatchlist = (watchlistId) => {
     })
   }).catch(() => errorNotif('Unable to delete the watchlist'))
 }
+
 const deleteAnime = (watchlistAnimeId) => {
   archivesApi.delete(`watchlist-anime/${watchlistAnimeId}`).then(() => {
     successNotif('Successfully removed the anime from the watchlist')
@@ -481,14 +512,41 @@ const deleteAnime = (watchlistAnimeId) => {
     })
   }).catch(() => errorNotif('Unable to removed the anime from the watchlist'))
 }
+
 const openReviewDialog = (review, anime) => {
-  reviewDialogRef.value = $q.dialog({
-    component: ReviewDialog,
+  animeDialogRef.value = $q.dialog({
+    component: AnimeDialog,
     componentProps: {
-      review, anime
+      type: 'review',
+      info: {
+        review,
+        anime
+      }
     }
-  }).onOk((res) => {
-    console.log(res)
   })
 }
+
+const addToWatchlist = (selectedWatchlists) => {
+  animeDialogRef.value = $q.dialog({
+    component: AnimeDialog,
+    componentProps: {
+      type: 'add_review',
+      info: {}
+    }
+  }).onOk((reviewData) => {
+    const payload = {}
+    if (reviewData) {
+      for (const key in reviewData) {
+        if (reviewData[key]) {
+          payload[key] = reviewData[key]
+        }
+      }
+    }
+    if (Object.keys(payload).length) {
+      return onDialogOK({ selectedWatchlists, payload })
+    }
+    onDialogOK({ selectedWatchlists })
+  })
+}
+
 </script>
