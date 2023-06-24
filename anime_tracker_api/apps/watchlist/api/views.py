@@ -13,6 +13,18 @@ from ..models import WatchList, WatchlistAnime
 from ...anime.models import Anime
 
 
+class WatchlistAnimeViewSet(ModelViewSet):
+    queryset = WatchlistAnime.objects.all()
+    serializer_class = WatchlistAnimeSerializer
+    http_method_names = [
+        'get',
+        'post',
+        'delete',
+        'put',
+        'patch'
+    ]
+
+
 class WatchListViewSet(ModelViewSet):
     serializer_class = WatchlistSerializer
     http_method_names = [
