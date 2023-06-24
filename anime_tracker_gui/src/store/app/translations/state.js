@@ -25,6 +25,7 @@ export default function () {
           FROM: 'from',
           TO: 'to',
           SUGGESTIONS: 'Suggestions',
+          RECOMMENDATIONS: 'Recommendations',
           STUDIOS: 'Studios',
           FAV: 'Favorites',
           RELEASE_YEAR: 'Release Year',

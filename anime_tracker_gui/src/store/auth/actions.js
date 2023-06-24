@@ -30,3 +30,11 @@ export const logout = async ({ commit }, payload) => {
     throw new Error(err.response.data.body.detail)
   }
 }
+export const getUserWatchlists = async ({ commit }) => {
+  try {
+    const response = await archivesApi.get('watchlist/get-playlists/')
+    return response.data.body
+  } catch (err) {
+    throw new Error(err.response.data.body.detail)
+  }
+}

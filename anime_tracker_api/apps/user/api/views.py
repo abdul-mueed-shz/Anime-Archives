@@ -33,6 +33,8 @@ class UserViewSet(ModelViewSet):
     http_method_names = ['post']
     permission_classes = [permissions.AllowAny]
 
+    # authentication_classes = []
+
     @staticmethod
     def is_authenticated(request):
         if not bool(request.user and request.user.is_authenticated):

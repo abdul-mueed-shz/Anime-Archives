@@ -6,7 +6,7 @@
         style="max-width:400px"
       >
         <q-form @submit.prevent="authenticate">
-          <q-card class="bg-dark">
+          <q-card class="card-border">
             <q-card-section class="text-h4 text-weight-bold text-primary">
               <div v-if="auth.selectedAction===auth.login">
                 Login
@@ -19,7 +19,6 @@
               <q-input
                 v-if="auth.selectedAction===auth.signup"
                 dense
-                dark
                 label="User Name"
                 v-model="authForm.user_name"
                 clearable
@@ -32,7 +31,6 @@
               </q-input>
               <q-input
                 dense
-                dark
                 label="Email"
                 type="text"
                 v-model="authForm.email"
@@ -47,7 +45,6 @@
               <q-input
                 v-if="auth.selectedAction===auth.signup"
                 dense
-                dark
                 label="Date of Birth"
                 v-model="authForm.date_of_birth"
                 clearable
@@ -77,7 +74,6 @@
               </q-input>
               <q-input
                 dense
-                dark
                 label="Password"
                 v-model="authForm.password"
                 clearable
@@ -92,7 +88,6 @@
               <q-input
                 v-if="auth.selectedAction===auth.signup"
                 dense
-                dark
                 label="Re-enter Password"
                 v-model="authForm.password2"
                 clearable
@@ -105,7 +100,7 @@
                 </template>
               </q-input>
 
-              <div class="flex justify-end text-white cursor-pointer">
+              <div class="flex justify-end  cursor-pointer">
                 <div
                   v-if="auth.selectedAction===auth.login"
                   class="q-pr-xs q-pb-xs"
@@ -128,7 +123,7 @@
               </div>
               <router-link
                 v-if="auth.selectedAction===auth.login"
-                class="flex justify-end text-white"
+                class="flex justify-end "
                 to=""
               >
                 Forgot Password
@@ -153,7 +148,7 @@
           style="max-width:150px"
           src="../assets/anime2.png"
         />
-        <div class="text-h5 text-white text-weight-bold q-mb-xl text-no-wrap">
+        <div class="text-h5  text-weight-bold q-mb-xl text-no-wrap">
           <span class="text-weight-bolder text-h4 text-secondary">W</span>elcome to Akaibu
         </div>
       </div>

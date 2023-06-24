@@ -6,4 +6,9 @@ from apps.anime.models import Anime
 class AnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = '__all__'
+        fields = [
+            'id',
+            'mal_id',
+            'name',
+            'thumbnail'
+        ]

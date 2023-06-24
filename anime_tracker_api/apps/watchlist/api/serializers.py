@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.anime.api.serializer import AnimeSerializer
+from apps.anime.models import Anime
 from apps.watchlist.models import WatchList, WatchlistAnime
 
 
@@ -11,9 +12,23 @@ class WatchlistSerializer(serializers.ModelSerializer):
 
 
 class WatchlistAnimeSerializer(serializers.ModelSerializer):
+    anime = serializers.PrimaryKeyRelatedField(queryset=Anime.objects.all())
+
     class Meta:
         model = WatchlistAnime
-        fields = '__all__'
+        fields = [
+            'watchlist',
+            'anime',
+            'rating',
+            'review',
+            'id'
+        ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        anime_representation = AnimeSerializer(instance.anime).data
+        representation['anime'] = anime_representation
+        return representation
 
 
 class SingleKeyListField(serializers.Field):

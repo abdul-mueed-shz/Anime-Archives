@@ -79,35 +79,54 @@
           class="anime-trailer"
         />
         <q-card class="q-ma-md">
-          <q-card-section class="text-bold">
-            {{ MAP.DETAILS.INTERPOLATIONS.SUGGESTIONS }}
-          </q-card-section>
-          <q-separator
-            inset
-            color="grey-6"
-          />
-          <q-card-section>
-            <div class="column">
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-              <q-btn
-                dense
-                label="Gintama"
-                color="primary"
-                class="q-mb-sm"
-              />
-            </div>
-          </q-card-section>
+          <q-card-actions align="center">
+            <q-btn
+              label="Add to watchlist"
+              icon="add"
+              color="primary"
+              class="border-radius__8px"
+              @click="addToWatchlist"
+            />
+          </q-card-actions>
+          <div v-if="false">
+            <q-separator
+              inset
+              color="grey-6"
+              class="q-mt-md"
+            />
+            <q-card-section class="text-bold">
+              {{ MAP.DETAILS.INTERPOLATIONS.RECOMMENDATIONS }}
+            </q-card-section>
+            <q-separator
+              inset
+              color="grey-6"
+            />
+            <q-card-section>
+              <div class="column">
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+                <q-btn
+                  dense
+                  label="Gintama"
+                  color="secondary"
+                  class="q-mb-sm border-radius__8px"
+                  outline
+                />
+              </div>
+            </q-card-section>
+          </div>
         </q-card>
       </q-card>
     </section>
@@ -117,14 +136,20 @@
 <script setup>
 import useComputes from 'src/common/composables/useComputes'
 import useUtility from 'src/common/composables/useUtility'
-import { jikanApi } from 'src/boot/axios'
-import { reactive } from 'vue'
+import { archivesApi, jikanApi } from 'src/boot/axios'
+import { computed, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { APP_CONSTS } from '../common/constants/app'
+import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
+import WatchlistDialog from 'src/components/WatchlistDialog.vue'
 
-const { errorNotif } = useUtility()
-const { MAP, isDarkMode } = useComputes()
+const store = useStore()
+const $q = useQuasar()
 const animeId = useRoute().params.id
+const { MAP, isDarkMode } = useComputes()
+const { errorNotif } = useUtility()
+const lightCardBorder = { 'card-border': !isDarkMode.value }
 
 const animeInformation = reactive({
   value: {}
@@ -134,8 +159,33 @@ const aired = reactive({
   from: undefined,
   to: undefined
 })
+const watchlistDialogRef = ref(null)
 
-const lightCardBorder = { 'card-border': !isDarkMode.value }
+const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
+
+const addToWatchlist = () => {
+  if (isLoggedIn.value) {
+    watchlistDialogRef.value = $q.dialog({
+      component: WatchlistDialog,
+      componentProps: {
+        malId: animeInformation.value?.mal_id
+      }
+    }).onOk(({ selectedWatchlists, payload = null }) => {
+      // console.log(animeInformation.value?.mal_id)
+      // console.log(animeInformation.value?.title_english)
+      // console.log(animeInformation.value?.images?.jpg?.large_image_url)
+      archivesApi.post('/anime/', {
+        mal_id: animeInformation.value?.mal_id,
+        name: animeInformation.value?.title_english,
+        thumbnail: animeInformation.value?.images?.jpg?.large_image_url
+      }).then(res => {
+        console.log(res.data.body)
+        console.log(selectedWatchlists)
+        console.log(payload)
+      })
+    })
+  }
+}
 
 jikanApi.get(`anime/${animeId}/full`)
   .then(
